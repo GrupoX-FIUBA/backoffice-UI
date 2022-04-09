@@ -5,9 +5,11 @@ import NavBar from '../../components/MainPage/NavBar'
 
 export default function MainPage() {
   return (
-    <div>
+    <div className='bg-spotiblue h-full'>
       <NavBar/>
-      <Login/>
+      <div className='h-full'>
+        <Login/>
+      </div>
       <Footer/>
     </div>
   )

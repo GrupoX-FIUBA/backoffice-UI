@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useState }  from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "../../application/layout/MainLayout";
 import Routes from "./routes";
 
 const Router = () => {
+
+  const [showMenu, setShowMenu] = useState(true)
+
+  const toggleMenu = () => {
+    if(showMenu)
+      setShowMenu(false);
+    else
+      setShowMenu(true);
+  }
+
+  const menuState = {
+    showMenu,
+    toggleMenu
+  }
 
   return (
       <BrowserRouter>
@@ -14,7 +28,7 @@ const Router = () => {
                 <Route
                   exact
                   path={route.path}
-                  component={route.component}
+                  component={() => <route.component menu={menuState} children={<route.children />}/>}
                   key={index}
                 />
               );
