@@ -5,7 +5,7 @@ import Routes from "./routes";
 
 const Router = () => {
 
-  const [showMenu, setShowMenu] = useState(true)
+  const [showMenu, setShowMenu] = useState(window.matchMedia("(min-width: 640px)").matches)
 
   const toggleMenu = () => {
     if(showMenu)

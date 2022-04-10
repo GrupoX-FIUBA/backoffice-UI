@@ -2,18 +2,24 @@ import React from "react";
 import Routes from "../../../infrastructure/routes/routes";
 import { NavLink } from "react-router-dom";
 
-const showFullMenu = (full = true) => (
+const showFullMenu = (full = true, toggleMenu) => (
   <>
     {Routes.map((route,index) => {
       if (route.type === "private") 
       return (
-        <NavLink key={index} exact to={{ pathname: route.path }} className="block py-2.5 px-4 rounded transition duration-200 hover:bg-edrans-primaryTransparent hover:text-white">
+        <NavLink key={index} onClick={() => menuSelect(toggleMenu)} exact to={{ pathname: route.path }} className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-900 hover:text-white">
           <i className="pr-2">{route.icon}</i>{full ? route.title : ""}
         </NavLink>
       );
     })}
   </> 
 );
+
+const menuSelect = (toggleMenu) => {
+  if(!window.matchMedia("(min-width: 640px)").matches){
+    toggleMenu();
+  }
+}
 
 const showFullLogout = (full = true) => {
 
@@ -45,7 +51,7 @@ const showFullLogout = (full = true) => {
 	)
 };
 
-const SideMenu = ({ showMenu }) => {
+const SideMenu = ({ showMenu, handlerMenu }) => {
 
   const headerIn = `transform ${
     !showMenu ? "-translate-x-full" : ""
@@ -60,15 +66,15 @@ const SideMenu = ({ showMenu }) => {
         className={`text-2xl md:text-base z-10 block sidebar bg-black text-blue-100 w-4/5 md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 shadow-white md:shadow-none ${headerIn}`}
       >
         <nav className="pt-32 md:pt-14 shadow-sm">				
-          {showFullMenu()}
+          {showFullMenu(true, handlerMenu)}
           {showFullLogout(true)}
         </nav>
-      </div>
+      </div>  
       <div
         className={`hidden md:block sidebar bg-black text-blue-100 w-13 space-y-6 py-7 px-2 absolute inset-y-0 left-0 ${headerOut}`}
       >
         <nav className={`pt-14 shadow-sm`}>
-          {showFullMenu(false)}
+          {showFullMenu(false, handlerMenu)}
           {showFullLogout(false)}
         </nav>
       </div>

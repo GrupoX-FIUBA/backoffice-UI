@@ -2,7 +2,7 @@ import React from 'react'
 import MainPage from '../../application/pages/public/MainPage';
 import HomePage from '../../application/pages/private/HomePage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import UserPage from '../../application/pages/private/UserPage';
 import PrivatePage from '../../application/pages/private/PrivatePage';
 
@@ -26,7 +26,7 @@ const Routes = [
     path: "/users",
     component: PrivatePage,
     children: UserPage,
-    icon: <FontAwesomeIcon icon={faUser}/>,
+    icon: <FontAwesomeIcon icon={faUserFriends}/>,
     type: 'private'
   }
 ];
