@@ -1,22 +1,44 @@
-import { faUser, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react'
 import PageCard from '../../components/Common/PageCard';
 import DefaultTable from '../../components/Common/table/DefaultTable';
+import Loader from '../../components/Loader/loader';
+import ConfirmationModal from '../../components/Modals/ConfirmationModal';
+import EmptyModal from '../../components/Modals/EmptyModal';
+import UserProfile from '../../components/UserPage/UserProfile';
 import { newUser } from '../../components/UserPage/UserRow';
 
 export default function UserPage() {
     const [data, setData] = useState([]);
+    const [showLoadingModal, setShowLoadingModal] = useState(false);
+    const [showBlockModal, setShowBlockModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showUserModal, setShowUserModal] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
 
     useEffect(() => {
         const parsedRows = [];
         users.forEach((row) => {
-            const parseRow = newUser(row);
+            const parseRow = newUser(row, showUserProfile, setShowBlockModal, setShowDeleteModal);
             parsedRows.push(parseRow);
         });
         
         setData(parsedRows);
     }, [])
     
+    const showUserProfile = (id) => {
+        setUserInfo({});
+        setShowUserModal(true);
+        //aqui le pego a la api
+        const userInfo = {
+            name: 'no se xd',
+            userId: id,
+            email: 'niidea@spotifiuby.com.ar',
+            money: 50
+        }
+        setUserInfo(userInfo);
+    }
+
 const columns = React.useMemo(
     () => [
     {
@@ -81,10 +103,37 @@ const columns = React.useMemo(
         }
     ]
 
+    const confirmDelete = () => {
+        setShowDeleteModal(false);
+    }
+
+    const confirmBlock = () => {
+        setShowBlockModal(false);
+    }
+
     return (
+        <>
+        {showLoadingModal && (
+            <EmptyModal closeModal={() => setShowLoadingModal(false)}>
+                <Loader/>
+            </EmptyModal>
+        )}
+        {showBlockModal && (
+            <ConfirmationModal confirm={confirmBlock} cancel={() => setShowBlockModal(false)} text='block this user'/>
+        )}
+        {showDeleteModal && (
+            <ConfirmationModal confirm={confirmDelete} cancel={() => setShowDeleteModal(false)} text='delete this user'/>
+        )}
+        {showUserModal && (
+            <EmptyModal closeModal={() => setShowUserModal(false)}>
+               <div className="grid col-span-1 row-span-2 overflow-auto max-h-screenmin ">
+                {userInfo ? <UserProfile userInfo={userInfo}/> : <Loader/>}
+              </div>
+            </EmptyModal>
+          )}
     <PageCard information={{pageName: 'User Management', pageIcon: faUserFriends}}>
         <div className="mx-4">
             <DefaultTable columns={columns} data={data}/>
         </div>
-    </PageCard>);
+    </PageCard></>);
 }

@@ -24,7 +24,8 @@ const Router = () => {
         <Switch>
           <MainLayout>
             {Routes.map((route, index) => {
-              return (
+              if(route.children){
+                return (
                 <Route
                   exact
                   path={route.path}
@@ -32,6 +33,15 @@ const Router = () => {
                   key={index}
                 />
               );
+              }
+              return (
+                <Route
+                  exact
+                  path={route.path}
+                  component={() => <route.component/>}
+                  key={index}
+                />
+              )
             })}
           </MainLayout>
         </Switch>
