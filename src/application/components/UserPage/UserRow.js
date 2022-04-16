@@ -6,9 +6,9 @@ export const newUser = (userObject, showUserProfile, showBlockUser, showDeleteUs
 
     userObject.profile = (<button className='rounded bg-spotiblue p-2' onClick={() => showUserProfile(userObject.userId)}>
         <FontAwesomeIcon icon={faUserEdit}/> </button>)
-    userObject.block = (<button className='rounded bg-purple-500 p-2' onClick={() => showBlockUser(true)}>
+    userObject.block = (<button className='rounded bg-purple-500 p-2' onClick={() => showBlockUser(userObject.userId)}>
         <FontAwesomeIcon icon={faUserLock}/> </button>)
-    userObject.delete = (<button className='rounded bg-red-400 p-2' onClick={() => showDeleteUser(true)}>
+    userObject.delete = (<button className='rounded bg-red-400 p-2' onClick={() => showDeleteUser(userObject.userId)}>
         <FontAwesomeIcon icon={faUserAltSlash}/> </button>)
 
     return {

@@ -9,13 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSortDown,
   faSortUp,
-  faSort,
-  faChevronLeft,
-  faChevronRight,
+  faSort
 } from "@fortawesome/free-solid-svg-icons";
-import GlobalFilter from "./GlobalFilter";
-import { TableButton } from "./TableButton";
-import { PageButton } from "./PageButton";
 
 const SimpleTable = ({ columns, data, children }) => {
   const {
@@ -23,18 +18,7 @@ const SimpleTable = ({ columns, data, children }) => {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    setGlobalFilter,
-    preGlobalFilteredRows,
-    state,
+    page
   } = useTable(
     {
       columns,

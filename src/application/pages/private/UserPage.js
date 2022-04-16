@@ -15,16 +15,29 @@ export default function UserPage() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showUserModal, setShowUserModal] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const [userToBlock, setUserToBlock] = useState(null);
+    const [userToDelete, setUserToDelete] = useState(null);
 
     useEffect(() => {
         const parsedRows = [];
         users.forEach((row) => {
-            const parseRow = newUser(row, showUserProfile, setShowBlockModal, setShowDeleteModal);
+            const parseRow = newUser(row, showUserProfile, showBlockUser, showDeleteUser);
             parsedRows.push(parseRow);
         });
         
         setData(parsedRows);
     }, [])
+
+
+    const showBlockUser = (userId) => {
+        setUserToBlock(userId);
+        setShowBlockModal(true);
+    }
+
+    const showDeleteUser = (userId) => {
+        setUserToDelete(userId);
+        setShowDeleteModal(true);
+    }
     
     const showUserProfile = (id) => {
         setUserInfo({});
@@ -105,10 +118,12 @@ const columns = React.useMemo(
 
     const confirmDelete = () => {
         setShowDeleteModal(false);
+        //Aqui le pego a la api
     }
 
     const confirmBlock = () => {
         setShowBlockModal(false);
+        //Aqui le pego a la api
     }
 
     return (
