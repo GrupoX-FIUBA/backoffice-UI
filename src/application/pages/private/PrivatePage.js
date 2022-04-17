@@ -5,7 +5,7 @@ import SideMenu from "../../components/Common/SideMenu";
 export default function PrivatePage({children, menu}) {
 
   return (
-  <div className="bg-spotiblue h-full bg-spotifyblue overflow-y-scroll" style={{'backgroundSize': '100% 100%',
+  <div className="bg-spoticeleste h-full overflow-y-scroll" style={{'backgroundSize': '100% 100%',
   'backgroundPosition': '46% 4%', }}>
     <NavBar handlerMenu={menu.toggleMenu}/>
     <SideMenu showMenu={menu.showMenu} handlerMenu={menu.toggleMenu}/>    

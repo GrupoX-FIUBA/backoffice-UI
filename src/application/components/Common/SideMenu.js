@@ -63,7 +63,7 @@ const SideMenu = ({ showMenu, handlerMenu }) => {
 	return (
     <>
       <div
-        className={`text-2xl md:text-base z-10 block sidebar bg-black text-blue-100 w-4/5 md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 shadow-white md:shadow-none ${headerIn}`}
+        className={`text-2xl md:text-base z-10 block sidebar bg-spotiblack text-blue-100 w-4/5 md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 shadow-white md:shadow-none ${headerIn}`}
       >
         <nav className="pt-32 md:pt-14 shadow-sm">				
           {showFullMenu(true, handlerMenu)}
@@ -71,7 +71,7 @@ const SideMenu = ({ showMenu, handlerMenu }) => {
         </nav>
       </div>  
       <div
-        className={`hidden md:block sidebar bg-black text-blue-100 w-13 space-y-6 py-7 px-2 absolute inset-y-0 left-0 ${headerOut}`}
+        className={`hidden md:block sidebar bg-spotiblack text-blue-100 w-13 space-y-6 py-7 px-2 absolute inset-y-0 left-0 ${headerOut}`}
       >
         <nav className={`pt-14 shadow-sm`}>
           {showFullMenu(false, handlerMenu)}

@@ -68,12 +68,12 @@ const SimpleTable = ({ columns, data, children }) => {
         </thead>
         <tbody 
           {...getTableBodyProps()}
-          className="bg-black divide-y divide-gray-500"
+          className="bg-spotiblack divide-y divide-gray-500"
         >
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} className="hover:bg-black">
+              <tr {...row.getRowProps()} className="hover:bg-spotiblack">
                 {row.cells.map((cell) => {
                   return (
                     <td

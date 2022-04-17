@@ -22,7 +22,7 @@ export default function GlobalFilter({
           onChange(e.target.value);
         }}
         placeholder={`${count} records...`}
-        className="text-gray-400 rounded-md px-3"
+        className="text-black rounded-md px-3"
       />
     </div>
   )

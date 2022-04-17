@@ -13,3 +13,15 @@
         }
     }
 }
+
+@layer base {
+    @font-face {
+        font-family: CircularSpotifyText;
+        src: url("CircularSpotifyText-Black.otf") format("opentype");
+    }
+
+    @font-face {
+        font-family: CircularSpotifyTextBold;
+        src: url("CircularSpotifyText-Bold.otf") format("opentype");
+    }
+}

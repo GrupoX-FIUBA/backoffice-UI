@@ -3,7 +3,7 @@ import logo from '../../../assets/logo.png'
 
 const Loader = () => {
   return (
-    <div className="bg-black">
+    <div className="bg-spotiblack">
     <div className="flex items-center justify-center">
       <div className="flex  items-center  space-x-2 animate-pulse h-96">
         <div className="px-2 text-white">Loading  </div>  

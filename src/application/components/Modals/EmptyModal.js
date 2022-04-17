@@ -18,7 +18,7 @@ const EmptyModal = ({ children, closeModal, okFunction }) => {
           aria-hidden="true"
         ></div>
         <div 
-          className="inline-block align-bottom rounded text-left overflow-hidden shadow-xl transform transition-all sm:my-9 sm:align-middle bg-blue-800 border-2"
+          className="inline-block align-bottom rounded text-left overflow-hidden shadow-xl transform transition-all sm:my-9 sm:align-middle bg-black border-2"
         >
           <div className="px-8 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start text-black">{children}</div>

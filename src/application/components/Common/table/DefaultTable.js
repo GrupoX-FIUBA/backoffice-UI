@@ -62,7 +62,7 @@ const DefaultTable = ({ columns, data, children }) => {
         {...getTableProps()}
         className="basis-3/12 min-w-full divide-y divide-gray-600"
       >
-        <thead className="bg-gray-700">
+        <thead className="bg-gray-600">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()} >
               {headerGroup.headers.map((column) => (
@@ -89,12 +89,12 @@ const DefaultTable = ({ columns, data, children }) => {
         </thead>
         <tbody 
           {...getTableBodyProps()}
-          className="bg-black divide-y divide-gray-500"
+          className="bg-gray-800 divide-y divide-gray-500"
         >
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} className="hover:bg-black">
+              <tr {...row.getRowProps()} className="hover:bg-gray-900">
                 {row.cells.map((cell) => {
                   return (
                     <td
