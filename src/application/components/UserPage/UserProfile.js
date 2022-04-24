@@ -22,6 +22,6 @@ export default function UserProfile({userInfo}) {
     }
 
   return (
-    <SimpleTable columns={columns} data={data}/>
+    <SimpleTable columns={columns} data={data} initialPageSize={15}/>
   )
 }

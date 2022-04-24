@@ -6,7 +6,7 @@ export default function Login() {
   const history = useHistory();
 
   const handleLogin = () => {
-    history.push('/home');
+    history.push('/users');
   }
 
   return (

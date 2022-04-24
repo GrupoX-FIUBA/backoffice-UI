@@ -12,7 +12,7 @@ const EmptyModal = ({ children, closeModal, okFunction }) => {
         <div
           className="fixed inset-0 transition-opacity"
           style={{
-            backgroundColor: "#1b1a3580", 
+            backgroundColor: "#11182780", 
             backdropFilter: "blur(6px)",
           }}
           aria-hidden="true"

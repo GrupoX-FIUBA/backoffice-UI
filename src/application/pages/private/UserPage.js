@@ -12,44 +12,136 @@ export default function UserPage() {
     const [data, setData] = useState([]);
     const [showLoadingModal, setShowLoadingModal] = useState(false);
     const [showBlockModal, setShowBlockModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showUserModal, setShowUserModal] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [userToBlock, setUserToBlock] = useState(null);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const [allUsers, setAllUsers] = useState([]);
+    const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
+
+    const mockedUsers = [
+        {
+            name: 'eduardo',
+            userId: 'aided',
+            email: 'eduardo@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-01',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'sofia',
+            userId: '1copad',
+            email: 'sofia@hotmail.com',
+            auth: 'fi',
+            signupDate: '2022-04-02',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'lucia',
+            userId: 'lou2ad',
+            email: 'lucia@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-03',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'federico',
+            userId: 'chipa',
+            email: 'federico@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-04',
+            status: 'Disabled',
+            type: 'client'
+        },
+        {
+            name: 'franco',
+            userId: 'erectu',
+            email: 'franco@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-05',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'iñaki',
+            userId: 'erucpo',
+            email: 'inaki@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-01',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'nicolas',
+            userId: 'eructo',
+            email: 'nicolas@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-01',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'gonzalo',
+            userId: 'idgeneradorandom',
+            email: 'gonzalo@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-01',
+            status: 'Enabled',
+            type: 'client'
+        },
+        {
+            name: 'profesor',
+            userId: 'niidea',
+            email: 'profesor@hotmail.com',
+            auth: 'ep',
+            signupDate: '2022-04-01',
+            status: 'Enabled',
+            type: 'client'
+        }
+    ]
 
     useEffect(() => {
+        setAllUsers(mockedUsers);
+        reloadData(mockedUsers);
+    }, [])
+
+    const reloadData = (users) => {
         const parsedRows = [];
         users.forEach((row) => {
-            const parseRow = newUser(row, showUserProfile, showBlockUser, showDeleteUser);
+            const parseRow = newUser(row, showUserProfile, showBlockUser);
             parsedRows.push(parseRow);
         });
         
         setData(parsedRows);
-    }, [])
+    }
 
 
     const showBlockUser = (userId) => {
         setUserToBlock(userId);
         setShowBlockModal(true);
     }
-
-    const showDeleteUser = (userId) => {
-        setUserToDelete(userId);
-        setShowDeleteModal(true);
-    }
     
+    const getTableInfoFrom = (userInfo) => {
+        return {
+            Id: userInfo.userId,
+            Name: userInfo.name,
+            Email: userInfo.email,
+            'Date of Sign Up': userInfo.signupDate,
+            Authentication: (userInfo.auth === 'ep') ? 'Email & Password' : 'Federated Identity',
+            Type: userInfo.type,
+            Status: userInfo.status,
+        }
+    }
+
     const showUserProfile = (id) => {
         setUserInfo({});
         setShowUserModal(true);
         //aqui le pego a la api
-        const userInfo = {
-            name: 'no se xd',
-            userId: id,
-            email: 'niidea@spotifiuby.com.ar',
-            money: 50
-        }
-        setUserInfo(userInfo);
+        const userInfo = allUsers.find(user => user.userId === id);
+        const tableInfo = getTableInfoFrom(userInfo);
+        setUserInfo(tableInfo);
     }
 
 const columns = React.useMemo(
@@ -67,77 +159,51 @@ const columns = React.useMemo(
         accessor: "table_profile",
     },
     {
-        Header: "Block",
-        accessor: "table_block",
+        Header: "Status",
+        accessor: "table_status",
     },
     {
-        Header: "Delete",
-        accessor: "table_delete",
+        Header: "Block",
+        accessor: "table_block",
     },
     ], []
   );
 
-    const users = [
-        {
-            name: 'eduardo',
-            userId: 'asdad'
-        },
-        {
-            name: 'sofia',
-            userId: '1asdad'
-        },
-        {
-            name: 'lucia',
-            userId: '2asdad'
-        },
-        {
-            name: 'federico',
-            userId: '3asdad'
-        },
-        {
-            name: 'franco',
-            userId: '4asdad'
-        },
-        {
-            name: 'iñaki',
-            userId: '5asdad'
-        },
-        {
-            name: 'nicolas',
-            userId: '6asdad'
-        },
-        {
-            name: 'gonzalo',
-            userId: '7asdad'
-        },
-        {
-            name: 'profesor',
-            userId: '8asdad'
-        }
-    ]
-
-    const confirmDelete = () => {
-        setShowDeleteModal(false);
-        //Aqui le pego a la api
-    }
-
     const confirmBlock = () => {
         setShowBlockModal(false);
+        
         //Aqui le pego a la api
+        const allUsersModified = allUsers;
+        const user = allUsersModified.find(user => user.userId === userToBlock)
+        if(user.status === 'Enabled')
+            user.status = 'Disabled';
+        else
+            user.status = 'Enabled';
+        setAllUsers(allUsersModified);
+        reloadData(allUsersModified);
+        setShowSuccessOnBlocking(true);
+    }
+
+    const getBlockText = () => {
+        if(allUsers.find(user => user.userId === userToBlock).status === 'Enabled')
+            return ('block this user');
+        return ('enable this user');
     }
 
     return (
         <>
+        {showSuccessOnBlocking && 
+        <EmptyModal closeModal={() => setShowSuccessOnBlocking(false)}>
+            <div className='text-white bg-spoticeleste rounded p-4'>
+                The state of the user was changed  </div>  
+        </EmptyModal>}
         {showLoadingModal && (
             <EmptyModal closeModal={() => setShowLoadingModal(false)}>
                 <Loader/>
             </EmptyModal>
         )}
         {showBlockModal && (
-            <ConfirmationModal confirm={confirmBlock} cancel={() => setShowBlockModal(false)} text='block this user'/>
-        )}
-        {showDeleteModal && (
-            <ConfirmationModal confirm={confirmDelete} cancel={() => setShowDeleteModal(false)} text='delete this user'/>
+            <ConfirmationModal confirm={confirmBlock} cancel={() => setShowBlockModal(false)} text={getBlockText()}/>
         )}
         {showUserModal && (
             <EmptyModal closeModal={() => setShowUserModal(false)}>

@@ -12,7 +12,7 @@ import {
   faSort
 } from "@fortawesome/free-solid-svg-icons";
 
-const SimpleTable = ({ columns, data, children }) => {
+const SimpleTable = ({ columns, data, children, initialPageSize = 5 }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -23,7 +23,7 @@ const SimpleTable = ({ columns, data, children }) => {
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 5 },
+      initialState: { pageIndex: 0, pageSize: initialPageSize },
     },
     useGlobalFilter,
     useSortBy,
