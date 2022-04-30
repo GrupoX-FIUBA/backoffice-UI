@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useTable,
   usePagination,
@@ -17,7 +17,17 @@ import GlobalFilter from "./GlobalFilter";
 import { TableButton } from "./TableButton";
 import { PageButton } from "./PageButton";
 
-const DefaultTable = ({ columns, data, children }) => {
+const DefaultTable = ({ columns, data, children, 
+  setGlobalFilter,
+  preGlobalFilteredRows,
+  realPageSize,
+  setRealPageSize,
+  maxPages,
+  realNextPage,
+  realPreviousPage,
+  realFirstPage,
+  realLastPage}) => {
+  const [localFilter, setLocalFilter] = useState('')
   const {
     getTableProps,
     getTableBodyProps,
@@ -32,27 +42,29 @@ const DefaultTable = ({ columns, data, children }) => {
     nextPage,
     previousPage,
     setPageSize,
-    setGlobalFilter,
-    preGlobalFilteredRows,
     state,
   } = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 5 },
+      initialState: { pageIndex: 0, pageSize: realPageSize },
     },
-    useGlobalFilter,
     useSortBy,
     usePagination
   );
+
+  const handleOnClick = () => {
+    setGlobalFilter(localFilter);
+  };
 
   return (
     <>
       <div className="flex flex-row my-3 mx-1 mt-7 leading-10">
         <GlobalFilter 
                 preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={state.globalFilter}
-                setGlobalFilter={setGlobalFilter}
+                globalFilter={localFilter}
+                setGlobalFilter={setLocalFilter}
+                handleOnClick={handleOnClick}
               />
               {children}
       </div>
@@ -132,13 +144,14 @@ const DefaultTable = ({ columns, data, children }) => {
             <div className="flex gap-x-2">
               <span className="text-sm text-white leading-9 align-middle ">
                 Page <span className="font-medium">{state.pageIndex + 1}</span>{" "}
-                of <span className="font-medium">{pageOptions.length}</span>
+                of <span className="font-medium">{maxPages}</span>
               </span>
               <select
               className="text-gray-400 rounded-md px-3"
                 value={state.pageSize}
                 onChange={(e) => {
-                  setPageSize(Number(e.target.value));
+                  setPageSize(Number(e.target.value))
+                  setRealPageSize(Number(e.target.value));
                 }}
               >
                 {[5, 10, 20].map((pageSize) => (
