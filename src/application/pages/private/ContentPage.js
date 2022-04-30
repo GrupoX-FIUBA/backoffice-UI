@@ -7,6 +7,7 @@ import { newContent } from '../../components/ContentPage/ContentRow';
 import Loader from '../../components/Loader/loader';
 import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
+import { getContent } from '../../repository/content';
 
 export default function ContentPage() {
     const [data, setData] = useState([]);
@@ -16,63 +17,22 @@ export default function ContentPage() {
     const [contentInfo, setContentInfo] = useState({});
     const [contentToBlock, setContentToBlock] = useState(null);
     const [allContent, setAllContent] = useState(null);
+    const [contentPerPage, setContentPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filter, setFilter] = useState('');
+    const [maxContent, setMaxContent] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
 
-    const music = [
-        {
-            id: '1',
-            name: 'Song 1',
-            author: 'Author 1',
-            status: 'Enabled'
-        },
-        {
-            id: '2',
-            name: 'Song 2',
-            author: 'Author 2',
-            status: 'Disabled'
-        },
-        {
-            id: '3',
-            name: 'Song 3',
-            author: 'Author 3',
-            status: 'Enabled'
-        },
-        {
-            id: '4',
-            name: 'Song 4',
-            author: 'Author 4',
-            status: 'Enabled'
-        },
-        {
-            id: '5',
-            name: 'Song 5',
-            author: 'Author 5',
-            status: 'Enabled'
-        },
-        {
-            id: '6',
-            name: 'Song 6',
-            author: 'Author 6',
-            status: 'Enabled'
-        },
-        {
-            id: '7',
-            name: 'Song 7',
-            author: 'Author 7',
-            status: 'Enabled'
-        },
-        {
-            id: '8',
-            name: 'Song 8',
-            author: 'Author 8',
-            status: 'Enabled'
-        }
-    ]
+    useEffect(async () => {
+        getContentFromApi();
+    }, [contentPerPage, currentPage, filter])
 
-    useEffect(() => {
-        setAllContent(music);
-        reloadData(music);
-    }, [])
+    const getContentFromApi = async () => {
+        const contentInfo = await getContent(currentPage, contentPerPage, filter);
+        setAllContent(contentInfo.contents);
+        reloadData(contentInfo.contents);
+        setMaxContent(contentInfo.total);
+    }
 
     const reloadData = (content) => {
         const parsedRows = [];
@@ -149,6 +109,24 @@ const columns = React.useMemo(
         return 'enable this content'
     }
 
+    const realLastPage = () => {
+        setCurrentPage(Math.ceil(maxContent / contentPerPage));
+    }
+
+    const realFirstPage = () => {
+        setCurrentPage(1);
+    }
+
+    const realNextPage = () => {
+        if(currentPage < Math.ceil(maxContent / contentPerPage))
+            setCurrentPage(currentPage+1);
+    }
+
+    const realPreviousPage = () => {
+        if(currentPage > 1)
+            setCurrentPage(currentPage-1);
+    }
+
     return (
         <>
         {showSuccessOnBlocking && 
@@ -173,7 +151,13 @@ const columns = React.useMemo(
           )}
     <PageCard information={{pageName: 'Content Management', pageIcon: faMusic}}>
         <div className="mx-4">
-            <DefaultTable columns={columns} data={data}/>
+        <DefaultTable columns={columns} data={data} setGlobalFilter={setFilter}
+             preGlobalFilteredRows={5} realPageSize={contentPerPage} setRealPageSize={setContentPerPage}
+             maxPages={Math.ceil(maxContent/contentPerPage)}
+             realFirstPage={realFirstPage}
+             realLastPage={realLastPage}
+             realNextPage={realNextPage}
+             realPreviousPage={realPreviousPage}/>
         </div>
     </PageCard></>);
 }

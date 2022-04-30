@@ -166,11 +166,11 @@ const mockedUsers = [
 const getUsers = async (page, userPerPage, filter = '') => {
     const users = mockedUsers;
     const offset = (page - 1) * userPerPage;
-    const filteredUsers = filter != '' ? users : users.filter(user => {
+    const filteredUsers = filter == '' ? users : users.filter(user => {
         return (user.name.toLowerCase().includes(filter.toLowerCase()) ||
                 user.email.toLowerCase().includes(filter.toLowerCase()) ||
                 user.id.toLowerCase().includes(filter.toLowerCase()));
-    });
+    }); 
     return {users: filteredUsers.slice(offset, offset + userPerPage), total: filteredUsers.length};
 }
 

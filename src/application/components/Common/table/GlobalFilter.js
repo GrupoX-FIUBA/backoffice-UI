@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAsyncDebounce } from 'react-table'
 
 export default function GlobalFilter({
   preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
   handleOnClick
 }) {
   const count = preGlobalFilteredRows
-  const [value, setValue] = React.useState(globalFilter)
+  const [localFilter, setLocalFilter] = useState('')
   const onChange = useAsyncDebounce(value => {
-    setGlobalFilter(value || undefined)
+    setLocalFilter(value || undefined)
   }, 200)
 
   return (
@@ -18,9 +16,9 @@ export default function GlobalFilter({
       <div className="inline-block">
         <div>Search:{' '}</div>
         <div className="w-1/2"><input
-          value={value || ""}
+          value={localFilter || ""}
           onChange={e => {
-            setValue(e.target.value);
+            setLocalFilter(e.target.value);
             onChange(e.target.value);
           }}
           placeholder={`${count} records...`}
@@ -30,7 +28,7 @@ export default function GlobalFilter({
       </div>
 
               <button
-                onClick={handleOnClick}
+                onClick={() => handleOnClick(localFilter)}
                 className="w-1/8 bg-spoticeleste text-white font-bold mx-1 py-1 px-4 rounded-xl"
               >
                 Filter

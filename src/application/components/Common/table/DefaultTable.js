@@ -27,7 +27,6 @@ const DefaultTable = ({ columns, data, children,
   realPreviousPage,
   realFirstPage,
   realLastPage}) => {
-  const [localFilter, setLocalFilter] = useState('')
   const {
     getTableProps,
     getTableBodyProps,
@@ -53,7 +52,7 @@ const DefaultTable = ({ columns, data, children,
     usePagination
   );
 
-  const handleOnClick = () => {
+  const handleOnClick = (localFilter) => {
     setGlobalFilter(localFilter);
   };
 
@@ -62,8 +61,6 @@ const DefaultTable = ({ columns, data, children,
       <div className="flex flex-row my-3 mx-1 mt-7 leading-10">
         <GlobalFilter 
                 preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={localFilter}
-                setGlobalFilter={setLocalFilter}
                 handleOnClick={handleOnClick}
               />
               {children}
@@ -168,8 +165,7 @@ const DefaultTable = ({ columns, data, children,
               >
                 <PageButton
                   className="rounded-l-md"
-                  onClick={() => gotoPage(0)}
-                  disabled={!canPreviousPage}
+                  onClick={() => realFirstPage()}
                 >
                   <span className="sr-only">First</span>
                   <FontAwesomeIcon
@@ -184,8 +180,7 @@ const DefaultTable = ({ columns, data, children,
                   />
                 </PageButton>
                 <PageButton
-                  onClick={() => previousPage()}
-                  disabled={!canPreviousPage}
+                  onClick={() => realPreviousPage()}
                 >
                   <span className="sr-only">Previous</span>
                   <FontAwesomeIcon
@@ -194,7 +189,7 @@ const DefaultTable = ({ columns, data, children,
                     aria-hidden="true"
                   />
                 </PageButton>
-                <PageButton onClick={() => nextPage()} disabled={!canNextPage}>
+                <PageButton onClick={() => realNextPage()}>
                   <span className="sr-only">Next</span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
@@ -204,8 +199,7 @@ const DefaultTable = ({ columns, data, children,
                 </PageButton>
                 <PageButton
                   className="rounded-r-md"
-                  onClick={() => gotoPage(pageCount - 1)}
-                  disabled={!canNextPage}
+                  onClick={() => realLastPage()}
                 >
                   <span className="sr-only">Last</span>
                   <FontAwesomeIcon
