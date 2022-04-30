@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 export const newUser = (userObject, showUserProfile, showBlockUser) => {
 
-    userObject.profile = (<button className='rounded bg-spotiblue p-2' onClick={() => showUserProfile(userObject.userId)}>
+    userObject.profile = (<button className='rounded bg-spotiblue p-2' onClick={() => showUserProfile(userObject)}>
         <FontAwesomeIcon icon={faUserEdit}/> </button>)
     const blockIcon = (userObject.status === 'Enabled') ? faUserLock : faUserCheck;
     const blockColor = (userObject.status === 'Enabled') ? 'bg-purple-500' : 'bg-spoticeleste';

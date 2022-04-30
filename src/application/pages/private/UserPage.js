@@ -102,10 +102,26 @@ export default function UserPage() {
         }
     ]
 
-    useEffect(() => {
-        setAllUsers(mockedUsers);
+    useEffect(async () => {
+        getUsersFromApi();
         reloadData(mockedUsers);
     }, [])
+
+    const getUsersFromApi = async () => {
+        setAllUsers(mockedUsers);
+    }
+
+    const showBlockUser = (userId) => {
+        setUserToBlock(userId);
+        setShowBlockModal(true);
+    }
+
+    const showUserProfile = (userObject) => {
+        setUserInfo({});
+        setShowUserModal(true);
+        const tableInfo = getTableInfoFrom(userObject);
+        setUserInfo(tableInfo);
+    }
 
     const reloadData = (users) => {
         const parsedRows = [];
@@ -114,13 +130,8 @@ export default function UserPage() {
             parsedRows.push(parseRow);
         });
         
+        setAllUsers(users);
         setData(parsedRows);
-    }
-
-
-    const showBlockUser = (userId) => {
-        setUserToBlock(userId);
-        setShowBlockModal(true);
     }
     
     const getTableInfoFrom = (userInfo) => {
@@ -133,15 +144,6 @@ export default function UserPage() {
             Type: userInfo.type,
             Status: userInfo.status,
         }
-    }
-
-    const showUserProfile = (id) => {
-        setUserInfo({});
-        setShowUserModal(true);
-        //aqui le pego a la api
-        const userInfo = allUsers.find(user => user.userId === id);
-        const tableInfo = getTableInfoFrom(userInfo);
-        setUserInfo(tableInfo);
     }
 
 const columns = React.useMemo(
