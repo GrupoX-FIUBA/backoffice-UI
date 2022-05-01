@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -27,6 +27,7 @@ ChartJS.register(
 export default function LogInsMetric({setClickable}) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({})
+  const messagesEndRef = useRef(null)
 
   const options = {
     responsive: true,
@@ -54,6 +55,14 @@ export default function LogInsMetric({setClickable}) {
       },
     },
   };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [loading]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +99,7 @@ export default function LogInsMetric({setClickable}) {
     <div className='text-white'>
       {loading ? <Loader/> :
       <Line options={options} data={data} />}
+      <div ref={messagesEndRef} />
       </div>
   )
 }

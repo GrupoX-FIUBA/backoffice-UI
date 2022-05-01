@@ -13,6 +13,7 @@ export default function SignUpsMetric({setClickable}) {
     const [moreInfo, setMoreInfo] = useState()
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(true);
+    const messagesEndRef = useRef(null)
 
     useEffect(() => {
       const fetchData = async() => {
@@ -53,8 +54,17 @@ export default function SignUpsMetric({setClickable}) {
         setShowMoreInfo(true);
         setMoreInfo('La info de ' + data.labels[dataClicked] + ' es: ' + data.datasets[0].data[dataClicked]);
     }
+    
+    const scrollToBottom = () => {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  
+    useEffect(() => {
+      scrollToBottom()
+    }, [loading]);
 
   return (
+    <div className='py-40'>
     <div className='h-96'>
         {showMoreInfo && <EmptyModal closeModal={() => setShowMoreInfo(false)}>
             <div className='text-white'>
@@ -92,6 +102,8 @@ export default function SignUpsMetric({setClickable}) {
             onClick={onClickDoughnut}
         />
           }
+          <div ref={messagesEndRef} />
+    </div>
     </div>
   )
 }

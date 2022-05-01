@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const showFullMenu = (full = true, toggleMenu) => (
   <>
-    Management
+    Admin
     {Routes.map((route,index) => {
       if (route.type === "private") 
       return (

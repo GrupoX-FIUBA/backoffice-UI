@@ -13,6 +13,7 @@ export default function BlockedsMetric({setClickable}) {
     const [moreInfo, setMoreInfo] = useState()
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState({})
+    const messagesEndRef = useRef(null)
 
     useEffect(() => {
       const fetchData = async () => {
@@ -54,7 +55,16 @@ export default function BlockedsMetric({setClickable}) {
         setMoreInfo('La info de ' + data.labels[dataClicked] + ' es: ' + data.datasets[0].data[dataClicked]);
     }
 
+    const scrollToBottom = () => {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  
+    useEffect(() => {
+      scrollToBottom()
+    }, [loading]);
+
   return (
+    <div className='py-40'>
     <div className='h-96'>
         {showMoreInfo && <EmptyModal closeModal={() => setShowMoreInfo(false)}>
             <div className='text-white'>
@@ -91,6 +101,8 @@ export default function BlockedsMetric({setClickable}) {
             }}
             onClick={onClickDoughnut}
         />}
+        <div ref={messagesEndRef} />
+    </div>
     </div>
   )
 }
