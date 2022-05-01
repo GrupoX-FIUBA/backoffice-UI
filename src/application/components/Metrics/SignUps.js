@@ -2,20 +2,36 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut, getElementAtEvent } from 'react-chartjs-2';
 import EmptyModal from '../Modals/EmptyModal';
+import { getUserMetricSignUps } from '../../repository/metrics';
+import Loader from '../Loader/loader';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function SignUpsMetric() {
+export default function SignUpsMetric({setClickable}) {
     const chartRef = useRef();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [moreInfo, setMoreInfo] = useState()
+    const [data, setData] = useState({})
+    const [loading, setLoading] = useState(true);
 
-    const mockedData = {
+    useEffect(() => {
+      const fetchData = async() => {
+        const data = await getUserMetricSignUps();
+        const parsedData = paseData(data);
+        setData(parsedData);
+        setLoading(false);
+        setClickable();
+      }
+      fetchData();
+    }, [])
+
+    const paseData = (data) => {
+      return {
         labels: ['With Email & Password', 'With federated identity'],
         datasets: [
           {
             label: 'User Sign Up\'s',
-            data: [12, 19],
+            data: [data.ep, data.fi],
             backgroundColor: [
               'rgba(255, 99, 132, 0.5)',
               'rgba(54, 162, 235, 0.5)',
@@ -27,14 +43,8 @@ export default function SignUpsMetric() {
             borderWidth: 1,
           },
         ],
-      };
-
-      const [data, setData] = useState(mockedData)
-
-    // useEffect(() => {
-    //   //LE PEGO A LA API Y ME DEVUELVE TODOS LOS REGISTROS CON SU TIPO
-    //   setData(mockedData);
-    // }, [])
+      }
+    }
 
     const onClickDoughnut = (event) => {
         if(getElementAtEvent(chartRef.current, event).length < 1)
@@ -51,6 +61,7 @@ export default function SignUpsMetric() {
                 {moreInfo}
             </div>
             </EmptyModal>}
+            {loading ? <Loader/> :
         <Doughnut
             ref={chartRef}
             data={data}
@@ -80,6 +91,7 @@ export default function SignUpsMetric() {
             }}
             onClick={onClickDoughnut}
         />
+          }
     </div>
   )
 }

@@ -23,16 +23,15 @@ export default function ContentPage() {
     const [maxContent, setMaxContent] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
 
-    useEffect(async () => {
+    useEffect(() => {
+        const getContentFromApi = async () => {
+            const contentInfo = await getContent(currentPage, contentPerPage, filter);
+            setAllContent(contentInfo.contents);
+            reloadData(contentInfo.contents);
+            setMaxContent(contentInfo.total);
+        }
         getContentFromApi();
     }, [contentPerPage, currentPage, filter])
-
-    const getContentFromApi = async () => {
-        const contentInfo = await getContent(currentPage, contentPerPage, filter);
-        setAllContent(contentInfo.contents);
-        reloadData(contentInfo.contents);
-        setMaxContent(contentInfo.total);
-    }
 
     const reloadData = (content) => {
         const parsedRows = [];

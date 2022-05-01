@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,6 +10,8 @@ import {
     Legend,
   } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { getUserMetricPasswordRecoveries } from '../../repository/metrics';
+import Loader from '../Loader/loader';
 
 
 ChartJS.register(
@@ -22,8 +24,36 @@ ChartJS.register(
     Legend
   );
 
-  const labels = ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05', '2022-01-06', '2022-01-07'];
-  export const options = {
+export default function PasswordRecoveriesMetric({setClickable}) {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({})
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserMetricPasswordRecoveries();
+      const parsedData = paseData(data);
+      setData(parsedData);
+      setLoading(false);
+      setClickable();
+    }
+    fetchData();
+  }, [])
+
+  const paseData = (data) => {
+    return {
+      labels: data.dates,
+      datasets: [
+        {
+          label: 'Quantity',
+          data: data.values,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        }
+      ],
+    }
+  }
+
+  const options = {
     responsive: true,
     plugins: {
       legend: {
@@ -31,20 +61,11 @@ ChartJS.register(
       },
     },
   };
-  export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Quantity',
-      data: [0,0,0,1,0,0,9],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    }
-  ],
-};
 
-export default function PasswordRecoveriesMetric() {
   return (
-    <div className='text-white'><Line options={options} data={data} /></div>
+    <div className='text-white'>
+      {loading ? <Loader /> :
+      <Line options={options} data={data} />}
+      </div>
   )
 }

@@ -23,16 +23,15 @@ export default function UserPage() {
     const [maxUsers, setMaxUsers] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
 
-    useEffect(async () => {
+    useEffect(() => {
+        const getUsersFromApi = async () => {
+            const userInfo = await getUsers(currentPage, usersPerPage, filter);
+            setAllUsers(userInfo.users);
+            reloadData(userInfo.users);
+            setMaxUsers(userInfo.total);
+        }
         getUsersFromApi();
     }, [usersPerPage, currentPage, filter])
-
-    const getUsersFromApi = async () => {
-        const userInfo = await getUsers(currentPage, usersPerPage, filter);
-        setAllUsers(userInfo.users);
-        reloadData(userInfo.users);
-        setMaxUsers(userInfo.total);
-    }
 
     const showBlockUser = (userId) => {
         setUserToBlock(userId);

@@ -1,7 +1,7 @@
 import React from 'react'
 import MainPage from '../../application/pages/public/MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartColumn, faHome, faMusic, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faChartColumn, faMusic, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import UserPage from '../../application/pages/private/UserPage';
 import PrivatePage from '../../application/pages/private/PrivatePage';
 import ContentPage from '../../application/pages/private/ContentPage';

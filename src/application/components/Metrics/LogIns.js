@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,6 +10,8 @@ import {
     Legend,
   } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import Loader from '../Loader/loader';
+import { getUserMetricLogIns } from '../../repository/metrics';
 
 
 ChartJS.register(
@@ -22,8 +24,11 @@ ChartJS.register(
     Legend
   );
 
-  const labels = ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05', '2022-01-06', '2022-01-07'];
-  export const options = {
+export default function LogInsMetric({setClickable}) {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({})
+
+  const options = {
     responsive: true,
     plugins: {
       legend: {
@@ -49,26 +54,42 @@ ChartJS.register(
       },
     },
   };
-  export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'With Email & Password',
-      data: [10,10,10,20,30,40,30],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'With federated identity',
-      data: [10,0,10,0,30,35,0],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
 
-export default function LogInsMetric() {
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserMetricLogIns();
+      const parsedData = paseData(data);
+      setData(parsedData);
+      setLoading(false);
+      setClickable();
+    }
+    fetchData();
+  }, [])
+
+  const paseData = (data) => {
+    return {
+      labels: data.dates,
+      datasets: [
+        {
+          label: 'With Email & Password',
+          data: data.ep,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+        {
+          label: 'With federated identity',
+          data: data.fi,
+          borderColor: 'rgb(53, 162, 235)',
+          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        },
+      ],
+    }
+  }
+
   return (
-    <div className='text-white'><Line options={options} data={data} /></div>
+    <div className='text-white'>
+      {loading ? <Loader/> :
+      <Line options={options} data={data} />}
+      </div>
   )
 }

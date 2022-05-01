@@ -2,39 +2,49 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut, getElementAtEvent } from 'react-chartjs-2';
 import EmptyModal from '../Modals/EmptyModal';
+import { getUserMetricBlocks } from '../../repository/metrics';
+import Loader from '../Loader/loader';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function BlockedsMetric() {
+export default function BlockedsMetric({setClickable}) {
     const chartRef = useRef();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [moreInfo, setMoreInfo] = useState()
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState({})
 
-    const mockedData = {
-        labels: ['Enabled Users', 'Blocked Users'],
-        datasets: [
-          {
-            label: 'User Status',
-            data: [9, 1],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(54, 162, 235, 0.5)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-            ],
-            borderWidth: 1,
-          },
-        ],
-      };
+    useEffect(() => {
+      const fetchData = async () => {
+        const data = await getUserMetricBlocks();
+        const parsedData = paseData(data);
+        setData(parsedData);
+        setLoading(false);
+        setClickable();
+      }
+      fetchData();
+    }, [])
 
-      const [data, setData] = useState(mockedData)
-
-    // useEffect(() => {
-    //   //LE PEGO A LA API Y ME DEVUELVE TODOS LOS REGISTROS CON SU TIPO
-    //   setData(mockedData);
-    // }, [])
+  const paseData = (data) => {
+    return {
+      labels: ['Enabled Users', 'Blocked Users'],
+      datasets: [
+        {
+          label: 'User Status',
+          data: [data.enabled, data.disabled],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    }
+  }
 
     const onClickDoughnut = (event) => {
         if(getElementAtEvent(chartRef.current, event).length < 1)
@@ -51,6 +61,7 @@ export default function BlockedsMetric() {
                 {moreInfo}
             </div>
             </EmptyModal>}
+            {loading ? <Loader /> :
         <Doughnut
             ref={chartRef}
             data={data}
@@ -79,7 +90,7 @@ export default function BlockedsMetric() {
                 }
             }}
             onClick={onClickDoughnut}
-        />
+        />}
     </div>
   )
 }

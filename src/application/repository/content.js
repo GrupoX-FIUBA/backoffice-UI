@@ -52,7 +52,7 @@ const mockedContent = [
 const getContent = async (page, contentPerPage, filter = '') => {
     const contents = mockedContent;
     const offset = (page - 1) * contentPerPage;
-    const filteredContent = filter == '' ? contents : contents.filter(user => {
+    const filteredContent = filter === '' ? contents : contents.filter(user => {
         return (user.name.toLowerCase().includes(filter.toLowerCase()) ||
                 user.email.toLowerCase().includes(filter.toLowerCase()) ||
                 user.id.toLowerCase().includes(filter.toLowerCase()));

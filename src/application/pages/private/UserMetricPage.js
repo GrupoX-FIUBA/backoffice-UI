@@ -2,7 +2,6 @@ import { faChartColumn } from '@fortawesome/free-solid-svg-icons'
 import React, { useState } from 'react'
 import PageCard from '../../components/Common/PageCard'
 import Tabs from '../../components/Common/tabs/Tabs'
-import Loader from '../../components/Loader/loader';
 import BlockedsMetric from '../../components/Metrics/Blockeds';
 import LogInsMetric from '../../components/Metrics/LogIns';
 import PasswordRecoveriesMetric from '../../components/Metrics/Passwords';
@@ -20,20 +19,17 @@ export default function UserMetricPage() {
     ]
 
     const generateView = () => {
-        if(loading) {
-            return <Loader/>
-        }
         if(selectedMetric === 0) {
-            return <SignUpsMetric/>
+            return <SignUpsMetric setClickable={() => setLoading(false)}/>
         }
         if(selectedMetric === 1) {
-            return <LogInsMetric/>
+            return <LogInsMetric setClickable={() => setLoading(false)}/>
         }
         if(selectedMetric === 2) {
-            return <BlockedsMetric/>
+            return <BlockedsMetric setClickable={() => setLoading(false)}/>
         }
         if(selectedMetric === 3) {
-            return <PasswordRecoveriesMetric/>
+            return <PasswordRecoveriesMetric setClickable={() => setLoading(false)}/>
         }
     }
 
