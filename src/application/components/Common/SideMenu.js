@@ -1,6 +1,8 @@
 import React from "react";
 import Routes from "../../../infrastructure/routes/routes";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../../context/authContext";
+import { useHistory } from "react-router-dom";
 
 const showFullMenu = (full = true, toggleMenu) => (
   <>
@@ -31,14 +33,19 @@ const menuSelect = (toggleMenu) => {
   }
 }
 
-const showFullLogout = (full = true) => {
+const showFullLogout = (logout, history, full = true) => {
+
+  const handleLogOut = async () => {
+    await logout();
+    history.push("/");
+  }
 
 	return (
 		<React.Fragment>
 			<ul className="text-white font-bold absolute bottom-0 left-0 w-full">
 				<li className="py-4 cursor-pointer text-center">
 
-					<button>
+					<button onClick={handleLogOut}>
 						{full ? "Logout" : ""}
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +76,8 @@ const SideMenu = ({ showMenu, handlerMenu }) => {
   const headerOut = `transform ${
     showMenu ? "-translate-x-full" : ""
   } translate-x-0 transition duration-200 ease-in-out`;
+  const {logout} = useAuth();
+  const history = useHistory();
 
 	return (
     <>
@@ -77,7 +86,7 @@ const SideMenu = ({ showMenu, handlerMenu }) => {
       >
         <nav className="pt-32 md:pt-14 shadow-sm">				
           {showFullMenu(true, handlerMenu)}
-          {showFullLogout(true)}
+          {showFullLogout(logout, history, true)}
         </nav>
       </div>  
       <div
@@ -85,7 +94,7 @@ const SideMenu = ({ showMenu, handlerMenu }) => {
       >
         <nav className={`pt-14 shadow-sm`}>
           {showFullMenu(false, handlerMenu)}
-          {showFullLogout(false)}
+          {showFullLogout(logout, history, false)}
         </nav>
       </div>
     </>

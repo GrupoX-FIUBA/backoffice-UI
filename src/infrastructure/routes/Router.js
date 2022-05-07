@@ -1,11 +1,15 @@
-import React, { useState }  from "react";
+import React, { useEffect, useState }  from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "../../application/layout/MainLayout";
+import { useAuth } from "../../context/authContext";
 import Routes from "./routes";
+
 
 const Router = () => {
 
   const [showMenu, setShowMenu] = useState(window.matchMedia("(min-width: 640px)").matches)
+
+  const {user} = useAuth();
 
   const toggleMenu = () => {
     if(showMenu)
@@ -22,28 +26,30 @@ const Router = () => {
   return (
       <BrowserRouter>
         <Switch>
-          <MainLayout>
-            {Routes.map((route, index) => {
-              if(route.children){
-                return (
-                <Route
-                  exact
-                  path={route.path}
-                  component={() => <route.component menu={menuState} children={<route.children />}/>}
-                  key={index}
-                />
-              );
-              }
-              return (
-                <Route
-                  exact
-                  path={route.path}
-                  component={() => <route.component/>}
-                  key={index}
-                />
-              )
-            })}
-          </MainLayout>
+            <MainLayout>
+              {Routes.map((route, index) => {
+                if(route.children && (route.type === 'public' || user != null)){
+                  return (
+                  <Route
+                    exact
+                    path={route.path}
+                    component={() => <route.component menu={menuState} children={<route.children />}/>}
+                    key={index}
+                  />
+                );
+                }
+                if(route.type === 'public' || user != null){
+                  return (
+                    <Route
+                      exact
+                      path={route.path}
+                      component={() => <route.component/>}
+                      key={index}
+                    />
+                  )
+                }
+              })}
+            </MainLayout>
         </Switch>
       </BrowserRouter>
   );
