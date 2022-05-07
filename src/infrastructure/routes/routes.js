@@ -1,11 +1,12 @@
 import React from 'react'
 import MainPage from '../../application/pages/public/MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartColumn, faMusic, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faChartColumn, faChartLine, faMusic, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import UserPage from '../../application/pages/private/UserPage';
 import PrivatePage from '../../application/pages/private/PrivatePage';
 import ContentPage from '../../application/pages/private/ContentPage';
 import UserMetricPage from '../../application/pages/private/UserMetricPage';
+import TransactionMetricPage from '../../application/pages/private/TransactionMetricPage';
 
 const Routes = [
 	{
@@ -35,6 +36,14 @@ const Routes = [
     path: "/metrics/user",
     component: PrivatePage,
     children: UserMetricPage,
+    icon: <FontAwesomeIcon icon={faChartLine}/>,
+    type: 'metric'
+  },
+  {
+    title: "Transactions",
+    path: "/metrics/transactions",
+    component: PrivatePage,
+    children: TransactionMetricPage,
     icon: <FontAwesomeIcon icon={faChartColumn}/>,
     type: 'metric'
   }

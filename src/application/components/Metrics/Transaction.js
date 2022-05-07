@@ -1,30 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import Loader from '../Loader/loader';
-import { getUserMetricLogIns } from '../../repository/metrics';
-
+import { getTransactionMetric } from '../../repository/metrics';
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-export default function LogInsMetric({setClickable}) {
+export default function Transaction() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({})
   const messagesEndRef = useRef(null)
@@ -34,24 +31,17 @@ export default function LogInsMetric({setClickable}) {
     plugins: {
       legend: {
         position: 'top',
-        onClick: null,
+        //color white
         labels: {
-          //change color of labels on chart js
-          generateLabels: function(chart) {
-            //change color
-            return chart.data.datasets.map(function(dtsts, i) {
-              //change color
-              return {
-                text: dtsts.label,
-                fillStyle: dtsts.borderColor,
-                fontSize: 12,
-                fontStyle: 'bold',
-                fontColor: '#fff',
-                lineHeight: 1.2,
-              }
-            });
-          }
+          color: '#fff',
         }
+      },
+      title: {
+        display: true,
+        text: 'Payments vs Raising',
+        //color white
+        fontColor: '#fff',
+        color: '#fff',
       },
     },
   };
@@ -66,28 +56,27 @@ export default function LogInsMetric({setClickable}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserMetricLogIns();
+      const data = await getTransactionMetric();
       const parsedData = paseData(data);
       setData(parsedData);
       setLoading(false);
-      setClickable();
     }
     fetchData();
   }, [])
 
   const paseData = (data) => {
     return {
-      labels: data.dates,
+      labels: data.months,
       datasets: [
         {
-          label: 'With Email & Password',
-          data: data.ep,
+          label: 'Payments',
+          data: data.payment,
           borderColor: 'rgb(255, 99, 132)',
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
         {
-          label: 'With federated identity',
-          data: data.fi,
+          label: 'Raising',
+          data: data.raising,
           borderColor: 'rgb(53, 162, 235)',
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
         },
@@ -98,7 +87,7 @@ export default function LogInsMetric({setClickable}) {
   return (
     <div className='text-white bg-gray-700 rounded-md'>
       {loading ? <Loader/> :
-      <Line options={options} data={data} />}
+      <Bar options={options} data={data} />}
       <div ref={messagesEndRef} />
       </div>
   )

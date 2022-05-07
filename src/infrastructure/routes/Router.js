@@ -1,4 +1,4 @@
-import React, { useEffect, useState }  from "react";
+import React, { useState }  from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "../../application/layout/MainLayout";
 import { useAuth } from "../../context/authContext";

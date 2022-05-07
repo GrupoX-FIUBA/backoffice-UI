@@ -27,9 +27,18 @@ const getUserMetricPasswordRecoveries = async() => {
     }
 }
 
+const getTransactionMetric = async() => {
+    return {
+        'months': ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        'payment': [0,0,0,20,30],
+        'raising': [0,0,0,0,30],
+    }
+}
+
 module.exports = {
     getUserMetricSignUps,
     getUserMetricLogIns,
     getUserMetricBlocks,
-    getUserMetricPasswordRecoveries
+    getUserMetricPasswordRecoveries,
+    getTransactionMetric
 }

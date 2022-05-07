@@ -1,4 +1,4 @@
-import { faChartColumn } from '@fortawesome/free-solid-svg-icons'
+import { faChartLine } from '@fortawesome/free-solid-svg-icons'
 import React, { useState } from 'react'
 import PageCard from '../../components/Common/PageCard'
 import Tabs from '../../components/Common/tabs/Tabs'
@@ -34,7 +34,7 @@ export default function UserMetricPage() {
     }
 
   return (
-    <PageCard information={{pageName: 'User Metrics', pageIcon: faChartColumn}}>
+    <PageCard information={{pageName: 'User Metrics', pageIcon: faChartLine}}>
         <div className="mx-4">
             <Tabs
             items={availableMetrics}

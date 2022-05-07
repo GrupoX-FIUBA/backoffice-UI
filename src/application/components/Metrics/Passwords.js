@@ -72,7 +72,7 @@ export default function PasswordRecoveriesMetric({setClickable}) {
   }, [loading]);
 
   return (
-    <div className='text-white'>
+    <div className='text-white bg-gray-700 rounded-md'>
       {loading ? <Loader /> :
       <Line options={options} data={data} />}
       <div ref={messagesEndRef} />

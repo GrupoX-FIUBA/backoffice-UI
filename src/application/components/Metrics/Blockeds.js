@@ -64,7 +64,7 @@ export default function BlockedsMetric({setClickable}) {
     }, [loading]);
 
   return (
-    <div className='py-40'>
+    <div className='py-40 bg-gray-700 rounded-md'>
     <div className='h-96'>
         {showMoreInfo && <EmptyModal closeModal={() => setShowMoreInfo(false)}>
             <div className='text-white'>
