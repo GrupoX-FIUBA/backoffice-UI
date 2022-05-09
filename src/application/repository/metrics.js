@@ -35,10 +35,34 @@ const getTransactionMetric = async() => {
     }
 }
 
+const getNewContentMetric = async() => {
+    return {
+        'dates': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05', '2022-01-06', '2022-01-07'],
+        'values': [10,0,10,5,30,40,30],
+    }
+}
+
+const getByGenreMetric = async() => {
+    return {
+        "labels": ['pop', 'rock', 'jazz', 'alternative'],
+        "values": [12,11,10,15]
+    }
+}
+
+const getBySubscriptionMetric = async() => {
+    return {
+        "labels": ['regular', 'silver', 'gold'],
+        "values": [12,11,10]
+    }
+}
+
 module.exports = {
     getUserMetricSignUps,
     getUserMetricLogIns,
     getUserMetricBlocks,
     getUserMetricPasswordRecoveries,
-    getTransactionMetric
+    getTransactionMetric,
+    getNewContentMetric,
+    getByGenreMetric,
+    getBySubscriptionMetric
 }
