@@ -1,0 +1,1 @@
+module.exports = 'https://api-gateway-mobile.herokuapp.com';

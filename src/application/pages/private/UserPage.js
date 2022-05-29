@@ -13,15 +13,18 @@ export default function UserPage() {
     const [data, setData] = useState([]);
     const [showLoadingModal, setShowLoadingModal] = useState(false);
     const [showBlockModal, setShowBlockModal] = useState(false);
+    const [showAdminModal, setShowAdminModal] = useState(false);
     const [showUserModal, setShowUserModal] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [userToBlock, setUserToBlock] = useState(null);
+    const [userToSetAdmin, setUserToSetAdmin] = useState(null);
     const [usersPerPage, setUsersPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
     const [filter, setFilter] = useState('');
     const [allUsers, setAllUsers] = useState([]);
     const [maxUsers, setMaxUsers] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
+    const [showSuccessOnSettingAdmin, setShowSuccessOnSettingAdmin] = useState(false)
 
     useEffect(() => {
         const getUsersFromApi = async () => {
@@ -38,6 +41,11 @@ export default function UserPage() {
         setShowBlockModal(true);
     }
 
+    const showSetAdminUser = (userId) => {
+        setUserToSetAdmin(userId);
+        setShowAdminModal(true);
+    }
+
     const showUserProfile = (userObject) => {
         setUserInfo({});
         setShowUserModal(true);
@@ -48,7 +56,7 @@ export default function UserPage() {
     const reloadData = (users) => {
         const parsedRows = [];
         users.forEach((row) => {
-            const parseRow = newUser(row, showUserProfile, showBlockUser);
+            const parseRow = newUser(row, showUserProfile, showBlockUser, showSetAdminUser);
             parsedRows.push(parseRow);
         });
         
@@ -89,6 +97,14 @@ const columns = React.useMemo(
         Header: "Block",
         accessor: "table_block",
     },
+    {
+        Header: "Is Admin",
+        accessor: "table_isAdmin",
+    },
+    {
+        Header: "Set Admin",
+        accessor: "table_admin",
+    },
     ], []
   );
 
@@ -111,6 +127,27 @@ const columns = React.useMemo(
         if(allUsers.find(user => user.id === userToBlock).enabled)
             return ('block this user');
         return ('enable this user');
+    }
+
+    const confirmSetAdmin = () => {
+        setShowAdminModal(false);
+        
+        //Aqui le pego a la api
+        const allUsersModified = allUsers;
+        const user = allUsersModified.find(user => user.id === userToSetAdmin)
+        if(user.admin)
+            user.admin = false;
+        else
+            user.admin = true;
+        setAllUsers(allUsersModified);
+        reloadData(allUsersModified);
+        setShowSuccessOnSettingAdmin(true);
+    }
+
+    const getSetAdminText = () => {
+        if(allUsers.find(user => user.id === userToSetAdmin).admin)
+            return ('remove admin privileges from this user');
+        return ('give admin privileges to this user');
     }
 
     const realLastPage = () => {
@@ -138,6 +175,11 @@ const columns = React.useMemo(
             <div className='text-white bg-spoticeleste rounded p-4'>
                 The state of the user was changed  </div>  
         </EmptyModal>}
+        {showSuccessOnSettingAdmin && 
+        <EmptyModal closeModal={() => setShowSuccessOnSettingAdmin(false)}>
+            <div className='text-white bg-spoticeleste rounded p-4'>
+                The admin privileges of the user wete changed  </div>  
+        </EmptyModal>}
         {showLoadingModal && (
             <EmptyModal closeModal={() => setShowLoadingModal(false)}>
                 <Loader/>
@@ -145,6 +187,9 @@ const columns = React.useMemo(
         )}
         {showBlockModal && (
             <ConfirmationModal confirm={confirmBlock} cancel={() => setShowBlockModal(false)} text={getBlockText()}/>
+        )}
+        {showAdminModal && (
+            <ConfirmationModal confirm={confirmSetAdmin} cancel={() => setShowAdminModal(false)} text={getSetAdminText()}/>
         )}
         {showUserModal && (
             <EmptyModal closeModal={() => setShowUserModal(false)}>

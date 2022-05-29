@@ -49,13 +49,9 @@ export default function ContentPage() {
         setShowBlockModal(true);
     }
     
-    const showPlayModal = (id) => {
-        setContentInfo({});
+    const showPlayModal = (content) => {
         setShowContentModal(true);
-        //aqui le pego a la api
-        const contentInfo = {
-        }
-        setContentInfo(contentInfo);
+        setContentInfo(content);
     }
 
 const columns = React.useMemo(
@@ -143,9 +139,7 @@ const columns = React.useMemo(
         )}
         {showContentModal && (
             <EmptyModal closeModal={() => setShowContentModal(false)}>
-               <div className="grid col-span-1 row-span-2 overflow-auto max-h-screenmin ">
                 {contentInfo ? <ContentPlayer contentInfo={contentInfo}/> : <Loader/>}
-              </div>
             </EmptyModal>
           )}
     <PageCard information={{pageName: 'Content Management', pageIcon: faMusic}}>

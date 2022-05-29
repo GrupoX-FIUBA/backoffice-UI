@@ -1,8 +1,12 @@
+const bffUrl = require('./bffUrl');
+const axios = require('axios');
+
 const mockedContent = [
     {
         id: '1',
         name: 'Song 1',
         author: 'Author 1',
+        url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
         status: 'Enabled'
     },
     {

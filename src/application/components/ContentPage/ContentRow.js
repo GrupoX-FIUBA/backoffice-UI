@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 export const newContent = (contentObject, showPlayModal, showBlockContent) => {
 
-    contentObject.play = (<button className='rounded bg-spotiblue p-2' onClick={() => showPlayModal(contentObject.id)}>
+    contentObject.play = (<button className='rounded bg-spotiblue p-2' onClick={() => showPlayModal(contentObject)}>
         <FontAwesomeIcon icon={faCirclePlay}/> </button>)
     const blockIcon = (contentObject.status === 'Enabled') ? faShieldHalved : faShield;
     const blockColor = (contentObject.status === 'Enabled') ? 'bg-purple-500' : 'bg-spoticeleste';
