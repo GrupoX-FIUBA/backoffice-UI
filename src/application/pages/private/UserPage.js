@@ -7,7 +7,7 @@ import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
 import UserProfile from '../../components/UserPage/UserProfile';
 import { newUser } from '../../components/UserPage/UserRow';
-import { getUsers } from '../../repository/users';
+import { blockUser, enableUser, getUsers } from '../../repository/users';
 
 export default function UserPage() {
     const [data, setData] = useState([]);
@@ -68,10 +68,10 @@ export default function UserPage() {
         return {
             Id: userInfo.id,
             Name: userInfo.name,
-            Email: userInfo.email,
+            Email: userInfo.mail,
             Authentication: (userInfo.auth === 'ep') ? 'Email & Password' : 'Federated Identity',
-            Type: userInfo.type,
-            Enabled: userInfo.enabled ? 'Yes': 'No',
+            Type: userInfo.admin ? 'Admin' : 'Client',
+            Enabled: userInfo.disabled ? 'No': 'Yes',
         }
     }
 
@@ -108,25 +108,28 @@ const columns = React.useMemo(
     ], []
   );
 
-    const confirmBlock = () => {
+    const confirmBlock = async () => {
         setShowBlockModal(false);
         
-        //Aqui le pego a la api
         const allUsersModified = allUsers;
         const user = allUsersModified.find(user => user.id === userToBlock)
-        if(user.enabled)
-            user.enabled = false;
-        else
-            user.enabled = true;
+        if(user.disabled){
+            await enableUser(user.id);
+            user.disabled = false;
+        }
+        else{
+            await blockUser(user.id);
+            user.disabled = true;
+        }
         setAllUsers(allUsersModified);
         reloadData(allUsersModified);
         setShowSuccessOnBlocking(true);
     }
 
     const getBlockText = () => {
-        if(allUsers.find(user => user.id === userToBlock).enabled)
-            return ('block this user');
-        return ('enable this user');
+        if(allUsers.find(user => user.id === userToBlock).disabled)
+            return ('enable this user');
+        return ('block this user');
     }
 
     const confirmSetAdmin = () => {

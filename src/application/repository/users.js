@@ -14,7 +14,7 @@ const axios = require('axios');
 // ]
 
 const getUsers = async (page, userPerPage, filter = '') => {
-    const users = await axios.get(`${bffUrl}/users`);
+    const users = (await axios.get(`${bffUrl}/users`)).data;
     const offset = (page - 1) * userPerPage;
     const filteredUsers = filter === '' ? users : users.filter(user => {
         return (user.name.toLowerCase().includes(filter.toLowerCase()) ||
@@ -24,6 +24,15 @@ const getUsers = async (page, userPerPage, filter = '') => {
     return {users: filteredUsers.slice(offset, offset + userPerPage), total: filteredUsers.length};
 }
 
+const blockUser = async (userId) => {
+    await axios.patch(`${bffUrl}/users/disable/${userId}`);
+}
+
+const enableUser = async (userId) => {
+    await axios.patch(`${bffUrl}/users/enable/${userId}`);
+}
 module.exports = {
-    getUsers
+    getUsers,
+    blockUser,
+    enableUser
 }

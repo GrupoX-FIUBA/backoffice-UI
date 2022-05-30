@@ -1,4 +1,5 @@
 import { faMusic} from '@fortawesome/free-solid-svg-icons';
+import { Howler } from 'howler';
 import React, { useEffect, useState } from 'react'
 import PageCard from '../../components/Common/PageCard';
 import DefaultTable from '../../components/Common/table/DefaultTable';
@@ -7,7 +8,7 @@ import { newContent } from '../../components/ContentPage/ContentRow';
 import Loader from '../../components/Loader/loader';
 import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
-import { getContent } from '../../repository/content';
+import { blockContent, enableContent, getContent } from '../../repository/content';
 
 export default function ContentPage() {
     const [data, setData] = useState([]);
@@ -84,24 +85,28 @@ const columns = React.useMemo(
   );
     
 
-    const confirmBlock = () => {
+    const confirmBlock = async () => {
         setShowBlockModal(false);
         //Aqui le pego a la api
         const allContentModified = allContent;
         const content = allContentModified.find(content => content.id === contentToBlock)
-        if(content.status === 'Enabled')
-            content.status = 'Disabled';
-        else
-            content.status = 'Enabled';
+        if(content.disabled){
+            await enableContent(content.id);
+            content.disabled = false;
+        }
+        else{
+            await blockContent(content.id);
+            content.disabled = true;
+        }
         setAllContent(allContentModified);
         reloadData(allContentModified); 
         setShowSuccessOnBlocking(true);
     }
 
     const getBlockText = () => {
-        if(allContent.find(content => content.id === contentToBlock).status === 'Enabled')
-            return 'block this content'
-        return 'enable this content'
+        if(allContent.find(content => content.id === contentToBlock).disabled)
+            return 'enable this content'
+        return 'block this content'
     }
 
     const realLastPage = () => {
@@ -138,7 +143,7 @@ const columns = React.useMemo(
             <ConfirmationModal confirm={confirmBlock} cancel={() => setShowBlockModal(false)} text={getBlockText()}/>
         )}
         {showContentModal && (
-            <EmptyModal closeModal={() => setShowContentModal(false)}>
+            <EmptyModal closeModal={() => {setShowContentModal(false); Howler.stop()}}>
                 {contentInfo ? <ContentPlayer contentInfo={contentInfo}/> : <Loader/>}
             </EmptyModal>
           )}

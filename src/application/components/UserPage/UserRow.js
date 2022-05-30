@@ -19,7 +19,7 @@ export const newUser = (userObject, showUserProfile, showBlockUser, showSetAdmin
         table_id: userObject.id,
         table_name: userObject.name,
         table_profile: userObject.profile,
-        table_enabled: userObject.enabled ? 'Yes' : 'No',
+        table_enabled: userObject.disabled ? 'No' : 'Yes',
         table_block: userObject.block,
         table_isAdmin: userObject.admin ? 'Yes': 'No',
         table_admin: userObject.adminButton,

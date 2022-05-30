@@ -54,7 +54,7 @@ const mockedContent = [
 ]
 
 const getContent = async (page, contentPerPage, filter = '') => {
-    const contents = mockedContent;
+    const contents = (await axios.get(`${bffUrl}/songs`)).data;//mockedContent;
     const offset = (page - 1) * contentPerPage;
     const filteredContent = filter === '' ? contents : contents.filter(user => {
         return (user.name.toLowerCase().includes(filter.toLowerCase()) ||
@@ -64,6 +64,21 @@ const getContent = async (page, contentPerPage, filter = '') => {
     return {contents: filteredContent.slice(offset, offset + contentPerPage), total: filteredContent.length};
 }
 
+const blockContent = async (songId) => {
+    await axios.patch(`${bffUrl}/songs/disable/${songId}`);
+}
+
+const enableContent = async (songId) => {
+    await axios.patch(`${bffUrl}/songs/enable/${songId}`);
+}
+
+const getSongUrl = async (songId) => {
+    return (await axios.get(`${bffUrl}/songs/uri/${songId}`)).data.uri;
+}
+
 module.exports = {
-    getContent
+    getContent,
+    blockContent,
+    enableContent,
+    getSongUrl
 }
