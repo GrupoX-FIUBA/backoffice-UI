@@ -90,13 +90,13 @@ const columns = React.useMemo(
         //Aqui le pego a la api
         const allContentModified = allContent;
         const content = allContentModified.find(content => content.id === contentToBlock)
-        if(content.disabled){
+        if(content.blocked){
             await enableContent(content.id);
-            content.disabled = false;
+            content.blocked = false;
         }
         else{
             await blockContent(content.id);
-            content.disabled = true;
+            content.blocked = true;
         }
         setAllContent(allContentModified);
         reloadData(allContentModified); 
@@ -104,7 +104,7 @@ const columns = React.useMemo(
     }
 
     const getBlockText = () => {
-        if(allContent.find(content => content.id === contentToBlock).disabled)
+        if(allContent.find(content => content.id === contentToBlock).blocked)
             return 'enable this content'
         return 'block this content'
     }
