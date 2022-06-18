@@ -5,7 +5,7 @@ const getContent = async (page, contentPerPage, filter = '', accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
-    const contents = (await axios.get(`${bffUrl}/songs`, {headers})).data;
+    const contents = (await axios.get(`${bffUrl}/songs?blockeds=true`, {headers})).data;
     const offset = (page - 1) * contentPerPage;
     const filteredContent = filter === '' ? contents : contents.filter(song => {
         return ((song.title && song.title.toLowerCase().includes(filter.toLowerCase())) ||
