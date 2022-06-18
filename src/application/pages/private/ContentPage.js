@@ -1,6 +1,7 @@
 import { faMusic} from '@fortawesome/free-solid-svg-icons';
 import { Howler } from 'howler';
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../../context/authContext';
 import PageCard from '../../components/Common/PageCard';
 import DefaultTable from '../../components/Common/table/DefaultTable';
 import ContentPlayer from '../../components/ContentPage/ContentPlayer';
@@ -23,10 +24,11 @@ export default function ContentPage() {
     const [filter, setFilter] = useState('');
     const [maxContent, setMaxContent] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
+    const {user} = useAuth();
 
     useEffect(() => {
         const getContentFromApi = async () => {
-            const contentInfo = await getContent(currentPage, contentPerPage, filter);
+            const contentInfo = await getContent(currentPage, contentPerPage, filter, user.accessToken);
             setAllContent(contentInfo.contents);
             reloadData(contentInfo.contents);
             setMaxContent(contentInfo.total);
@@ -91,11 +93,11 @@ const columns = React.useMemo(
         const allContentModified = allContent;
         const content = allContentModified.find(content => content.id === contentToBlock)
         if(content.blocked){
-            await enableContent(content.id);
+            await enableContent(content.id, user.accessToken);
             content.blocked = false;
         }
         else{
-            await blockContent(content.id);
+            await blockContent(content.id, user.accessToken);
             content.blocked = true;
         }
         setAllContent(allContentModified);

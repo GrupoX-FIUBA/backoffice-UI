@@ -14,7 +14,7 @@ export const newContent = (contentObject, showPlayModal, showBlockContent) => {
     return {
         table_id: contentObject.id,
         table_name: contentObject.title,
-        table_author: contentObject.author,
+        table_author: (contentObject.author ? contentObject.author.name : 'Unknown'),
         table_play: contentObject.play,
         table_status: contentObject.blocked ? 'Blocked' : 'Enabled',
         table_block: contentObject.block,

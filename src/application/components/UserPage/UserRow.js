@@ -6,17 +6,17 @@ export const newUser = (userObject, showUserProfile, showBlockUser, showSetAdmin
 
     userObject.profile = (<button className='rounded bg-spotiblue p-2' onClick={() => showUserProfile(userObject)}>
         <FontAwesomeIcon icon={faUserEdit}/> </button>)
-    const blockIcon = (userObject.enabled) ? faUserLock : faUserCheck;
-    const blockColor = (userObject.enabled) ? 'bg-purple-500' : 'bg-spoticeleste';
-    userObject.block = (<button className={`rounded ${blockColor} p-2`} onClick={() => showBlockUser(userObject.id)}>
+    const blockIcon = (!userObject.disabled) ? faUserLock : faUserCheck;
+    const blockColor = (!userObject.disabled) ? 'bg-purple-500' : 'bg-spoticeleste';
+    userObject.block = (<button className={`rounded ${blockColor} p-2`} onClick={() => showBlockUser(userObject.uid)}>
         <FontAwesomeIcon icon={blockIcon}/> </button>)
     const adminIcon = (userObject.admin) ? faUser : faUserTie;
     const adminColor = (userObject.admin) ? 'bg-red-500' : 'bg-spoticeleste';
-    userObject.adminButton = (<button className={`rounded ${adminColor} p-2`} onClick={() => showSetAdminUser(userObject.id)}>
+    userObject.adminButton = (<button className={`rounded ${adminColor} p-2`} onClick={() => showSetAdminUser(userObject.uid)}>
         <FontAwesomeIcon icon={adminIcon}/> </button>)
 
     return {
-        table_id: userObject.id,
+        table_id: userObject.uid,
         table_name: userObject.name,
         table_profile: userObject.profile,
         table_enabled: userObject.disabled ? 'No' : 'Yes',

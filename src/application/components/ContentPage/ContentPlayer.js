@@ -2,15 +2,17 @@ import { faPlay, faSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Howl, Howler } from 'howler'
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../../context/authContext';
 import { getSongUrl } from '../../repository/content';
 
 export default function ContentPlayer({contentInfo}) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [songUrl, setSongUrl] = useState(null)
+  const {user} = useAuth();
 
   useEffect(() => {
     const getSong = async() => {
-      const songUrl = await getSongUrl(contentInfo.id)
+      const songUrl = await getSongUrl(contentInfo.id, user.accessToken)
       console.log(songUrl);
       setSongUrl(songUrl);
     }

@@ -1,5 +1,6 @@
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../../context/authContext';
 import PageCard from '../../components/Common/PageCard';
 import DefaultTable from '../../components/Common/table/DefaultTable';
 import Loader from '../../components/Loader/loader';
@@ -7,7 +8,7 @@ import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
 import UserProfile from '../../components/UserPage/UserProfile';
 import { newUser } from '../../components/UserPage/UserRow';
-import { blockUser, enableUser, getUsers } from '../../repository/users';
+import { blockUser, enableUser, getUsers, grantAdmin, removeAdmin } from '../../repository/users';
 
 export default function UserPage() {
     const [data, setData] = useState([]);
@@ -25,10 +26,11 @@ export default function UserPage() {
     const [maxUsers, setMaxUsers] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
     const [showSuccessOnSettingAdmin, setShowSuccessOnSettingAdmin] = useState(false)
+    const {user} = useAuth();
 
     useEffect(() => {
         const getUsersFromApi = async () => {
-            const userInfo = await getUsers(currentPage, usersPerPage, filter);
+            const userInfo = await getUsers(currentPage, usersPerPage, filter, user.accessToken);
             setAllUsers(userInfo.users);
             reloadData(userInfo.users);
             setMaxUsers(userInfo.total);
@@ -66,11 +68,12 @@ export default function UserPage() {
     
     const getTableInfoFrom = (userInfo) => {
         return {
-            Id: userInfo.id,
+            Id: userInfo.uid,
             Name: userInfo.name,
-            Email: userInfo.mail,
-            Authentication: (userInfo.auth === 'ep') ? 'Email & Password' : 'Federated Identity',
+            Email: userInfo.email,
+            Authentication: (!userInfo.federated) ? 'Email & Password' : 'Federated Identity',
             Type: userInfo.admin ? 'Admin' : 'Client',
+            Subscription: userInfo.subscription,
             Enabled: userInfo.disabled ? 'No': 'Yes',
         }
     }
@@ -112,14 +115,14 @@ const columns = React.useMemo(
         setShowBlockModal(false);
         
         const allUsersModified = allUsers;
-        const user = allUsersModified.find(user => user.id === userToBlock)
-        if(user.disabled){
-            await enableUser(user.id);
-            user.disabled = false;
+        const userModifying = allUsersModified.find(curr_user => curr_user.uid === userToBlock)
+        if(userModifying.disabled){
+            await enableUser(userModifying.uid, user.accessToken);
+            userModifying.disabled = false;
         }
         else{
-            await blockUser(user.id);
-            user.disabled = true;
+            await blockUser(userModifying.uid, user.accessToken);
+            userModifying.disabled = true;
         }
         setAllUsers(allUsersModified);
         reloadData(allUsersModified);
@@ -127,28 +130,31 @@ const columns = React.useMemo(
     }
 
     const getBlockText = () => {
-        if(allUsers.find(user => user.id === userToBlock).disabled)
+        if(allUsers.find(curr_user => curr_user.uid === userToBlock).disabled)
             return ('enable this user');
         return ('block this user');
     }
 
-    const confirmSetAdmin = () => {
+    const confirmSetAdmin = async () => {
         setShowAdminModal(false);
         
         //Aqui le pego a la api
         const allUsersModified = allUsers;
-        const user = allUsersModified.find(user => user.id === userToSetAdmin)
-        if(user.admin)
-            user.admin = false;
-        else
-            user.admin = true;
+        const userModifying = allUsersModified.find(curr_user => curr_user.uid === userToSetAdmin)
+        if(userModifying.admin) {
+            await removeAdmin(userModifying.uid, user.accessToken);
+            userModifying.admin = false;
+        } else {
+            await grantAdmin(userModifying.uid, user.accessToken);
+            userModifying.admin = true;
+        }
         setAllUsers(allUsersModified);
         reloadData(allUsersModified);
         setShowSuccessOnSettingAdmin(true);
     }
 
     const getSetAdminText = () => {
-        if(allUsers.find(user => user.id === userToSetAdmin).admin)
+        if(allUsers.find(curr_user => curr_user.uid === userToSetAdmin).admin)
             return ('remove admin privileges from this user');
         return ('give admin privileges to this user');
     }
