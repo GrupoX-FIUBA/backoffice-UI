@@ -44,10 +44,23 @@ const grantAdmin = async (userId, accessToken) => {
     await axios.patch(`${bffUrl}/users/admin_status/${userId}?admin=true`, {}, {headers});
 }
 
+const checkAdmin = async (accessToken) => {
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    }
+    try{
+        await axios.get(`${bffUrl}/user_is_admin`, {headers});
+        return true;
+    }catch(err){
+        return false;
+    }
+}
+
 module.exports = {
     getUsers,
     blockUser,
     enableUser,
     removeAdmin,
-    grantAdmin
+    grantAdmin,
+    checkAdmin
 }
