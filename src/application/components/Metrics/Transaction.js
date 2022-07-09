@@ -11,6 +11,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import Loader from '../Loader/loader';
 import { getTransactionMetric } from '../../repository/metrics';
+import { useAuth } from '../../../context/authContext';
 
 ChartJS.register(
   CategoryScale,
@@ -25,6 +26,7 @@ export default function Transaction() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({})
   const messagesEndRef = useRef(null)
+  const {user} = useAuth();
 
   const options = {
     responsive: true,
@@ -38,7 +40,7 @@ export default function Transaction() {
       },
       title: {
         display: true,
-        text: 'Payments vs Raising',
+        text: 'Deposits vs Payments in ETH. (Last 7 days)',
         //color white
         fontColor: '#fff',
         color: '#fff',
@@ -56,7 +58,7 @@ export default function Transaction() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTransactionMetric();
+      const data = await getTransactionMetric(user.accessToken);
       const parsedData = paseData(data);
       setData(parsedData);
       setLoading(false);
@@ -66,17 +68,17 @@ export default function Transaction() {
 
   const paseData = (data) => {
     return {
-      labels: data.months,
+      labels: data.days,
       datasets: [
         {
-          label: 'Payments',
-          data: data.payment,
+          label: 'Deposits',
+          data: data.deposits,
           borderColor: 'rgb(255, 99, 132)',
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
         {
-          label: 'Raising',
-          data: data.raising,
+          label: 'Payment',
+          data: data.payments,
           borderColor: 'rgb(53, 162, 235)',
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
         },

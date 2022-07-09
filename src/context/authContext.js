@@ -13,9 +13,14 @@ export const useAuth = () => {
 
 export function AuthProvider({children}){
     const [user, setUser] = useState(null);
+    const [adminError, setAdminError] = useState(null);
 
     const login = async (email, password) => {
         return signInWithEmailAndPassword(auth, email, password);
+    }
+
+    const notAdmin = () => {
+        setAdminError("You are not an Admin!");
     }
 
     const logout = () => signOut(auth);
@@ -28,7 +33,7 @@ export function AuthProvider({children}){
       }, []);
 
     return(
-        <authContext.Provider value={{login, logout, user}}>
+        <authContext.Provider value={{login, logout, user, notAdmin, adminError}}>
             {children}
         </authContext.Provider>
     )

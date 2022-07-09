@@ -9,7 +9,7 @@ export default function Login() {
     password: ''
   })
   const [errorClass, setErrorClass] = useState('hidden')
-  const { login } = useAuth();
+  const { login, adminError } = useAuth();
   const history = useHistory();
 
   const userLogged = useAuth().user;
@@ -41,6 +41,7 @@ export default function Login() {
       <div className='p-5 bg-spotiblack border-white border-2 rounded-xl text-white max-h-80'>
       <div className="text-center text-xl bold font-bold">Spotifiuby Access</div>
       <div className={`text-red-600 ${errorClass}`}>Error, please check your credentials</div>
+      {adminError && <div className={`text-red-600`}>{adminError}</div>}
       <div className='m-5'>
         <div className='text-xl text-white'>Username</div>
         <input name="email" className='w-full border-2 border-black px-2 text-black' type='text' onChange={handleChange}/>

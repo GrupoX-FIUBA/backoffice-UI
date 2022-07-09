@@ -7,12 +7,13 @@ import { checkAdmin } from "../../repository/users";
 
 export default function PrivatePage({children, menu}) {
 
-  const {user, logout} = useAuth();
+  const {user, logout, notAdmin} = useAuth();
   const history = useHistory();
 
   useEffect(() => {
     const removeIfNotAdmin = async () => {
       if (!(await checkAdmin(user.accessToken))) {
+        notAdmin();
         await logout();
         history.push('/');
       } 
