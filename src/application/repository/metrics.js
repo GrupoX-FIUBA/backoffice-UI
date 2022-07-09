@@ -13,14 +13,54 @@ const getUserMetricSignUps = async(accessToken) => {
 }
 
 const getUserMetricLogIns = async(accessToken) => {
-    // const headers = {
-    //     Authorization: `Bearer ${accessToken}`
-    // }
-    // const contents = (await axios.get(`${bffUrl}/metrics/Logins`, {headers})).data;
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    }
+    const contents = (await axios.get(`${bffUrl}/metrics/logins`, {headers})).data;
+    const epKeys = Object.keys(contents.manual);
+    const fiKeys = Object.keys(contents.federated);
+    const epValues = Object.values(contents.manual);
+    const fiValues = Object.values(contents.federated);
+    const dates = [];
+    const ep = [];
+    const fi = [];
+    let i = 0;
+    let j = 0;
+    while(i < epKeys.length && j < fiKeys.length) {
+        if(new Date(epKeys[i]) < new Date(fiKeys[j])){
+            dates.push(epKeys[i])
+            ep.push(epValues[i]);
+            fi.push(0);
+            i++;
+        } else if(new Date(epKeys[i]) > new Date(fiKeys[j])){
+            dates.push(fiKeys[j])
+            fi.push(fiValues[j]);
+            ep.push(0);
+            j++;
+        } else{
+            dates.push(fiKeys[j])
+            ep.push(epValues[i]);
+            fi.push(fiValues[j]);
+            i++;
+            j++;
+        }
+    }
+    while(i < epKeys.length) {
+        dates.push(epKeys[i])
+        ep.push(epValues[i]);
+        fi.push(0);
+        i++;
+    }
+    while(j < fiKeys.length) {
+        dates.push(fiKeys[j])
+        ep.push(0);
+        fi.push(fiValues[j]);
+        j++;
+    }
     return {
-        'dates': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05', '2022-01-06', '2022-01-07'],
-        'ep': [10,10,10,20,30,40,30],
-        'fi': [10,0,10,0,30,35,0],
+        'dates': dates,
+        'ep': ep,
+        'fi': fi,
     }
 }
 
