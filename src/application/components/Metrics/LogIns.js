@@ -12,6 +12,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import Loader from '../Loader/loader';
 import { getUserMetricLogIns } from '../../repository/metrics';
+import { useAuth } from '../../../context/authContext';
 
 
 ChartJS.register(
@@ -28,6 +29,7 @@ export default function LogInsMetric({setClickable}) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({})
   const messagesEndRef = useRef(null)
+  const {user} = useAuth();
 
   const options = {
     responsive: true,
@@ -66,7 +68,7 @@ export default function LogInsMetric({setClickable}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserMetricLogIns();
+      const data = await getUserMetricLogIns(user.accessToken);
       const parsedData = paseData(data);
       setData(parsedData);
       setLoading(false);

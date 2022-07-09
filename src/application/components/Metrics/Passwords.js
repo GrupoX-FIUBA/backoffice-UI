@@ -12,6 +12,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { getUserMetricPasswordRecoveries } from '../../repository/metrics';
 import Loader from '../Loader/loader';
+import { useAuth } from '../../../context/authContext';
 
 
 ChartJS.register(
@@ -28,10 +29,11 @@ export default function PasswordRecoveriesMetric({setClickable}) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({})
   const messagesEndRef = useRef(null)
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserMetricPasswordRecoveries();
+      const data = await getUserMetricPasswordRecoveries(user.accessToken);
       const parsedData = paseData(data);
       setData(parsedData);
       setLoading(false);

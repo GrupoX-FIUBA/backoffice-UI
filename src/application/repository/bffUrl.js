@@ -1,1 +1,1 @@
-module.exports = 'https://api-gateway-mobile.herokuapp.com';
+module.exports = 'https://api-gateway-manuelbilbao.cloud.okteto.net';

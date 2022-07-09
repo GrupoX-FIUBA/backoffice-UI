@@ -4,6 +4,7 @@ import { Doughnut, getElementAtEvent } from 'react-chartjs-2';
 import EmptyModal from '../Modals/EmptyModal';
 import { getUserMetricSignUps } from '../../repository/metrics';
 import Loader from '../Loader/loader';
+import { useAuth } from '../../../context/authContext';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -14,10 +15,11 @@ export default function SignUpsMetric({setClickable}) {
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(true);
     const messagesEndRef = useRef(null)
+    const {user} = useAuth();
 
     useEffect(() => {
       const fetchData = async() => {
-        const data = await getUserMetricSignUps();
+        const data = await getUserMetricSignUps(user.accessToken);
         const parsedData = paseData(data);
         setData(parsedData);
         setLoading(false);

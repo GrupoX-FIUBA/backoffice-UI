@@ -50,14 +50,6 @@ const Routes = [
     type: 'metric'
   },
   {
-    title: "Content",
-    path: "/metrics/content",
-    component: PrivatePage,
-    children: ContentMetricPage,
-    icon: <FontAwesomeIcon icon={faChartArea}/>,
-    type: 'metric'
-  },
-  {
     title: "Transactions",
     path: "/metrics/transactions",
     component: PrivatePage,
