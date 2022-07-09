@@ -34,6 +34,7 @@ export default function ContentPage() {
             setMaxContent(contentInfo.total);
         }
         getContentFromApi();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contentPerPage, currentPage, filter])
 
     const reloadData = (content) => {

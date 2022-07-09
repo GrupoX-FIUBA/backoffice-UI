@@ -75,6 +75,7 @@ export default function LogInsMetric({setClickable}) {
       setClickable();
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const paseData = (data) => {

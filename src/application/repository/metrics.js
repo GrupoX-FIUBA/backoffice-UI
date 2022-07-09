@@ -13,10 +13,10 @@ const getUserMetricSignUps = async(accessToken) => {
 }
 
 const getUserMetricLogIns = async(accessToken) => {
-    const headers = {
-        Authorization: `Bearer ${accessToken}`
-    }
-    const contents = (await axios.get(`${bffUrl}/metrics/Logins`, {headers})).data;
+    // const headers = {
+    //     Authorization: `Bearer ${accessToken}`
+    // }
+    // const contents = (await axios.get(`${bffUrl}/metrics/Logins`, {headers})).data;
     return {
         'dates': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05', '2022-01-06', '2022-01-07'],
         'ep': [10,10,10,20,30,40,30],

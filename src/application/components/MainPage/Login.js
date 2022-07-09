@@ -29,6 +29,7 @@ export default function Login() {
     if(userLogged){
       history.push('/users');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userLogged])
   
 

@@ -1,5 +1,5 @@
-import { faClipboardList, faUserFriends } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react'
+import { faClipboardList } from '@fortawesome/free-solid-svg-icons';
+import React from 'react'
 import PageCard from '../../components/Common/PageCard';
 import Iframe from 'react-iframe';
 

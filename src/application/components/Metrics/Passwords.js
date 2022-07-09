@@ -40,6 +40,7 @@ export default function PasswordRecoveriesMetric({setClickable}) {
       setClickable();
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const paseData = (data) => {

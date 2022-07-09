@@ -36,6 +36,7 @@ export default function UserPage() {
             setMaxUsers(userInfo.total);
         }
         getUsersFromApi();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [usersPerPage, currentPage, filter])
 
     const showBlockUser = (userId) => {

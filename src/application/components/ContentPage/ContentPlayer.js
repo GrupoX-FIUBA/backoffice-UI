@@ -17,6 +17,7 @@ export default function ContentPlayer({contentInfo}) {
       setSongUrl(songUrl);
     }
     getSong();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
 

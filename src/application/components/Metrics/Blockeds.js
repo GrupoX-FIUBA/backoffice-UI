@@ -26,6 +26,7 @@ export default function BlockedsMetric({setClickable}) {
         setClickable();
       }
       fetchData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
   const paseData = (data) => {

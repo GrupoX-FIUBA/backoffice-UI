@@ -27,7 +27,9 @@ const Router = () => {
       <BrowserRouter>
         <Switch>
             <MainLayout>
-              {Routes.map((route, index) => {
+              {
+              // eslint-disable-next-line array-callback-return
+              Routes.map((route, index) => {
                 if(route.children && (route.type === 'public' || user != null)){
                   return (
                   <Route

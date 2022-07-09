@@ -1,13 +1,12 @@
 import React from 'react'
 import MainPage from '../../application/pages/public/MainPage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartArea, faChartColumn, faChartLine, faClipboardList, faMusic, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faChartColumn, faChartLine, faClipboardList, faMusic, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import UserPage from '../../application/pages/private/UserPage';
 import PrivatePage from '../../application/pages/private/PrivatePage';
 import ContentPage from '../../application/pages/private/ContentPage';
 import UserMetricPage from '../../application/pages/private/UserMetricPage';
 import TransactionMetricPage from '../../application/pages/private/TransactionMetricPage';
-import ContentMetricPage from '../../application/pages/private/ContentMetricPage';
 import ServicePage from '../../application/pages/private/ServicePage';
 
 const Routes = [

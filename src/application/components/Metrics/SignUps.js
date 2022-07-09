@@ -26,6 +26,7 @@ export default function SignUpsMetric({setClickable}) {
         setClickable();
       }
       fetchData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const paseData = (data) => {

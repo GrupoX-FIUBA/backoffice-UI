@@ -19,6 +19,7 @@ export default function PrivatePage({children, menu}) {
       } 
     }
     removeIfNotAdmin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
   
 

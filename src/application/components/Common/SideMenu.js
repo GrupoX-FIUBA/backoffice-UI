@@ -7,7 +7,9 @@ import { useHistory } from "react-router-dom";
 const showFullMenu = (full = true, toggleMenu) => (
   <>
     Admin
-    {Routes.map((route,index) => {
+    {
+      // eslint-disable-next-line array-callback-return
+      Routes.map((route,index) => {
       if (route.type === "private") 
       return (
         <NavLink key={index} onClick={() => menuSelect(toggleMenu)} exact to={{ pathname: route.path }} className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-900 hover:text-white">
@@ -16,7 +18,9 @@ const showFullMenu = (full = true, toggleMenu) => (
       );
     })}
     Metrics
-    {Routes.map((route,index) => {
+    {
+      // eslint-disable-next-line array-callback-return
+      Routes.map((route,index) => {
       if (route.type === "metric") 
       return (
         <NavLink key={index} onClick={() => menuSelect(toggleMenu)} exact to={{ pathname: route.path }} className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-900 hover:text-white">

@@ -64,6 +64,7 @@ export default function Transaction() {
       setLoading(false);
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const paseData = (data) => {
