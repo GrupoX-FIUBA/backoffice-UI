@@ -9,7 +9,7 @@ import { newContent } from '../../components/ContentPage/ContentRow';
 import Loader from '../../components/Loader/loader';
 import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
-import { blockContent, enableContent, getContent } from '../../repository/content';
+import { enableContent, getContent, disableContent } from '../../repository/content';
 
 export default function ContentPage() {
     const [data, setData] = useState([]);
@@ -98,7 +98,7 @@ const columns = React.useMemo(
             content.blocked = false;
         }
         else{
-            await blockContent(content.id, user.accessToken);
+            await disableContent(content.id, user.accessToken);
             content.blocked = true;
         }
         setAllContent(allContentModified);

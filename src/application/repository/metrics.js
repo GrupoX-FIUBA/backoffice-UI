@@ -2,7 +2,7 @@ const bffUrl = require('./bffUrl');
 const axios = require('axios');
 const moment = require('moment')
 
-const getUserMetricSignUps = async(accessToken) => {
+export const getUserMetricSignUps = async(accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -13,7 +13,7 @@ const getUserMetricSignUps = async(accessToken) => {
     }
 }
 
-const getUserMetricLogIns = async(accessToken) => {
+export const getUserMetricLogIns = async(accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -37,7 +37,7 @@ const getUserMetricLogIns = async(accessToken) => {
     }
 }
 
-const getUserMetricBlocks = async(accessToken) => {
+export const getUserMetricBlocks = async(accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -48,7 +48,7 @@ const getUserMetricBlocks = async(accessToken) => {
     }
 }
 
-const getUserMetricPasswordRecoveries = async(accessToken) => {
+export const getUserMetricPasswordRecoveries = async(accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -59,7 +59,7 @@ const getUserMetricPasswordRecoveries = async(accessToken) => {
     }
 }
 
-const getTransactionMetric = async(accessToken) => {
+export const getTransactionMetric = async(accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -70,12 +70,4 @@ const getTransactionMetric = async(accessToken) => {
         'deposits': Object.values(deposits).map(d => d.amount),
         'payments': Object.values(payments).map(p => p.amount),
     }
-}
-
-module.exports = {
-    getUserMetricSignUps,
-    getUserMetricLogIns,
-    getUserMetricBlocks,
-    getUserMetricPasswordRecoveries,
-    getTransactionMetric
 }

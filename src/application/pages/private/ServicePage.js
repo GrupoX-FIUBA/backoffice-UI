@@ -11,7 +11,7 @@ export default function ServicePage() {
         <div className="mx-4">
             <Iframe url="https://status.spotifiuby.com.ar/"
             width="100%"
-            height="1250px"
+            height="1500px"
             id="myId"
             className="myClassname"
             display="block"

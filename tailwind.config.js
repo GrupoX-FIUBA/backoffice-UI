@@ -1,6 +1,8 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.js",
+    "./public/index.html"
   ],
   theme: {
     extend: {
@@ -16,8 +18,8 @@ module.exports = {
         'spoticeleste': '#007CAD',
       },
       backgroundImage: {
-        'spotify': "url('/bursts.svg')",
-        'spotifyblue': "url('/bluebg.jpg')",
+        'spotify': "url('./bursts.svg')",
+        'spotifyblue': "url('./bluebg.jpg')",
       }
     },
   },

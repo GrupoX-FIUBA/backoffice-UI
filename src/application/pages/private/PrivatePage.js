@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useAuth } from "../../../context/authContext";
 import NavBar from "../../components/Common/NavBar";
 import SideMenu from "../../components/Common/SideMenu";
-import { checkAdmin } from "../../repository/users";
+import { verifyIfUserIsAdmin } from "../../repository/users";
 
 export default function PrivatePage({children, menu}) {
 
@@ -12,7 +12,7 @@ export default function PrivatePage({children, menu}) {
 
   useEffect(() => {
     const removeIfNotAdmin = async () => {
-      if (!(await checkAdmin(user.accessToken))) {
+      if (!(await verifyIfUserIsAdmin(user.accessToken))) {
         notAdmin();
         await logout();
         history.push('/');

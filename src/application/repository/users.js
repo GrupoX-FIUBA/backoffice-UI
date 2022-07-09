@@ -1,7 +1,7 @@
 const bffUrl = require('./bffUrl');
 const axios = require('axios');
 
-const getUsers = async (page, userPerPage, filter = '', accessToken) => {
+export const getUsers = async (page, userPerPage, filter = '', accessToken) => {
     console.log(accessToken)
     const headers = {
         Authorization: `Bearer ${accessToken}`
@@ -16,35 +16,35 @@ const getUsers = async (page, userPerPage, filter = '', accessToken) => {
     return {users: filteredUsers.slice(offset, offset + userPerPage), total: filteredUsers.length};
 }
 
-const blockUser = async (userId, accessToken) => {
+export const disableUser = async (userId, accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
     await axios.patch(`${bffUrl}/users/disable_status/${userId}?disabled=true`, {}, {headers});
 }
 
-const enableUser = async (userId, accessToken) => {
+export const enableUser = async (userId, accessToken) => {
     const headers = {
         authorization: `Bearer ${accessToken}`
     }
     await axios.patch(`${bffUrl}/users/disable_status/${userId}?disabled=false`, {}, {headers});
 }
 
-const removeAdmin = async (userId, accessToken) => {
+export const removeAdmin = async (userId, accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
     await axios.patch(`${bffUrl}/users/admin_status/${userId}?admin=false`, {}, {headers});
 }
 
-const grantAdmin = async (userId, accessToken) => {
+export const grantAdmin = async (userId, accessToken) => {
     const headers = {
         authorization: `Bearer ${accessToken}`
     }
     await axios.patch(`${bffUrl}/users/admin_status/${userId}?admin=true`, {}, {headers});
 }
 
-const checkAdmin = async (accessToken) => {
+export const verifyIfUserIsAdmin = async (accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -54,13 +54,4 @@ const checkAdmin = async (accessToken) => {
     }catch(err){
         return false;
     }
-}
-
-module.exports = {
-    getUsers,
-    blockUser,
-    enableUser,
-    removeAdmin,
-    grantAdmin,
-    checkAdmin
 }

@@ -21,7 +21,6 @@ export default function Login() {
     }
     catch(error){
       setErrorClass('');
-      console.log(error);
     }
   }
 

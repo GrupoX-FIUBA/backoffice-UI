@@ -8,7 +8,7 @@ import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
 import UserProfile from '../../components/UserPage/UserProfile';
 import { newUser } from '../../components/UserPage/UserRow';
-import { blockUser, enableUser, getUsers, grantAdmin, removeAdmin } from '../../repository/users';
+import { disableUser, enableUser, getUsers, grantAdmin, removeAdmin } from '../../repository/users';
 
 export default function UserPage() {
     const [data, setData] = useState([]);
@@ -122,7 +122,7 @@ const columns = React.useMemo(
             userModifying.disabled = false;
         }
         else{
-            await blockUser(userModifying.uid, user.accessToken);
+            await disableUser(userModifying.uid, user.accessToken);
             userModifying.disabled = true;
         }
         setAllUsers(allUsersModified);

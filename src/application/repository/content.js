@@ -1,7 +1,7 @@
 const bffUrl = require('./bffUrl');
 const axios = require('axios');
 
-const getContent = async (page, contentPerPage, filter = '', accessToken) => {
+export const getContent = async (page, contentPerPage, filter = '', accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
@@ -15,30 +15,23 @@ const getContent = async (page, contentPerPage, filter = '', accessToken) => {
     return {contents: filteredContent.slice(offset, offset + contentPerPage), total: filteredContent.length};
 }
 
-const blockContent = async (songId, accessToken) => {
+export const disableContent = async (songId, accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
     await axios.patch(`${bffUrl}/songs/disable/${songId}`, {}, {headers});
 }
 
-const enableContent = async (songId, accessToken) => {
+export const enableContent = async (songId, accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
     await axios.patch(`${bffUrl}/songs/enable/${songId}`, {}, {headers});
 }
 
-const getSongUrl = async (songId, accessToken) => {
+export const getSongUrl = async (songId, accessToken) => {
     const headers = {
         Authorization: `Bearer ${accessToken}`
     }
     return (await axios.get(`${bffUrl}/songs/uri/${songId}`, {headers})).data.uri;
-}
-
-module.exports = {
-    getContent,
-    blockContent,
-    enableContent,
-    getSongUrl
 }

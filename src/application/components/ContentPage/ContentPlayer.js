@@ -13,7 +13,6 @@ export default function ContentPlayer({contentInfo}) {
   useEffect(() => {
     const getSong = async() => {
       const songUrl = await getSongUrl(contentInfo.id, user.accessToken)
-      console.log(songUrl);
       setSongUrl(songUrl);
     }
     getSong();
