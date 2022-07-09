@@ -1,5 +1,6 @@
 const bffUrl = require('./bffUrl');
 const axios = require('axios');
+const moment = require('moment')
 
 const getUserMetricSignUps = async(accessToken) => {
     const headers = {
@@ -19,43 +20,15 @@ const getUserMetricLogIns = async(accessToken) => {
     const contents = (await axios.get(`${bffUrl}/metrics/logins`, {headers})).data;
     const epKeys = Object.keys(contents.manual);
     const fiKeys = Object.keys(contents.federated);
-    const epValues = Object.values(contents.manual);
-    const fiValues = Object.values(contents.federated);
     const dates = [];
     const ep = [];
     const fi = [];
-    let i = 0;
-    let j = 0;
-    while(i < epKeys.length && j < fiKeys.length) {
-        if(new Date(epKeys[i]) < new Date(fiKeys[j])){
-            dates.push(epKeys[i])
-            ep.push(epValues[i]);
-            fi.push(0);
-            i++;
-        } else if(new Date(epKeys[i]) > new Date(fiKeys[j])){
-            dates.push(fiKeys[j])
-            fi.push(fiValues[j]);
-            ep.push(0);
-            j++;
-        } else{
-            dates.push(fiKeys[j])
-            ep.push(epValues[i]);
-            fi.push(fiValues[j]);
-            i++;
-            j++;
-        }
-    }
-    while(i < epKeys.length) {
-        dates.push(epKeys[i])
-        ep.push(epValues[i]);
-        fi.push(0);
-        i++;
-    }
-    while(j < fiKeys.length) {
-        dates.push(fiKeys[j])
-        ep.push(0);
-        fi.push(fiValues[j]);
-        j++;
+    const date = (moment(epKeys[0]) < moment(fiKeys[0])) ? moment(epKeys[0]) : moment(fiKeys[0]);
+    while (date <= moment(epKeys[epKeys.length - 1]) || date <= moment(fiKeys[fiKeys.length - 1])) {
+        dates.push(date.format("YYYY-MM-DD"));
+        ep.push((contents.manual[date.format("YYYY-MM-DD")]) ? contents.manual[date.format("YYYY-MM-DD")] : 0);
+        fi.push((contents.federated[date.format("YYYY-MM-DD")]) ? contents.federated[date.format("YYYY-MM-DD")] : 0);
+        date.add(1, 'days');
     }
     return {
         'dates': dates,
