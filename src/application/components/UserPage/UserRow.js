@@ -1,8 +1,8 @@
 import React from 'react';
-import { faUser, faUserCheck, faUserEdit, faUserLock, faUserTie } from "@fortawesome/free-solid-svg-icons"
+import { faMoneyCheckDollar, faUser, faUserCheck, faUserEdit, faUserLock, faUserTie } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-export const newUser = (userObject, showUserProfile, showBlockUser, showSetAdminUser) => {
+export const newUser = (userObject, showUserProfile, showBlockUser, showSetAdminUser, showPayModal) => {
 
     userObject.profile = (<button className='rounded bg-spotiblue p-2' onClick={() => showUserProfile(userObject)}>
         <FontAwesomeIcon icon={faUserEdit}/> </button>)
@@ -14,6 +14,8 @@ export const newUser = (userObject, showUserProfile, showBlockUser, showSetAdmin
     const adminColor = (userObject.admin) ? 'bg-red-500' : 'bg-spoticeleste';
     userObject.adminButton = (<button className={`rounded ${adminColor} p-2`} onClick={() => showSetAdminUser(userObject.uid)}>
         <FontAwesomeIcon icon={adminIcon}/> </button>)
+    userObject.payButton = (<button className={`rounded bg-black p-2`} onClick={() => showPayModal(userObject.uid, userObject.name)}>
+        <FontAwesomeIcon icon={faMoneyCheckDollar}/> </button>)
 
     return {
         table_id: userObject.uid,
@@ -23,5 +25,6 @@ export const newUser = (userObject, showUserProfile, showBlockUser, showSetAdmin
         table_block: userObject.block,
         table_isAdmin: userObject.admin ? 'Yes': 'No',
         table_admin: userObject.adminButton,
+        table_pay: userObject.payButton,
     }
 }

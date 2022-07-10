@@ -1,5 +1,6 @@
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react'
+import PayModal from 'src/application/components/Modals/PayModal';
 import { useAuth } from '../../../context/authContext';
 import PageCard from '../../components/Common/PageCard';
 import DefaultTable from '../../components/Common/table/DefaultTable';
@@ -8,24 +9,28 @@ import ConfirmationModal from '../../components/Modals/ConfirmationModal';
 import EmptyModal from '../../components/Modals/EmptyModal';
 import UserProfile from '../../components/UserPage/UserProfile';
 import { newUser } from '../../components/UserPage/UserRow';
-import { disableUser, enableUser, getUsers, grantAdmin, removeAdmin } from '../../repository/users';
+import { disableUser, enableUser, getUsers, grantAdmin, payUser, removeAdmin } from '../../repository/users';
 
 export default function UserPage() {
     const [data, setData] = useState([]);
     const [showLoadingModal, setShowLoadingModal] = useState(false);
     const [showBlockModal, setShowBlockModal] = useState(false);
     const [showAdminModal, setShowAdminModal] = useState(false);
+    const [showPayUserModal, setShowPayUserModal] = useState(false);
     const [showUserModal, setShowUserModal] = useState(false);
     const [userInfo, setUserInfo] = useState({});
     const [userToBlock, setUserToBlock] = useState(null);
     const [userToSetAdmin, setUserToSetAdmin] = useState(null);
+    const [userToPay, setUserToPay] = useState({userId: null, userName: null});
     const [usersPerPage, setUsersPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
+    const [payingAmount, setPayingAmount] = useState(0);
     const [filter, setFilter] = useState('');
     const [allUsers, setAllUsers] = useState([]);
     const [maxUsers, setMaxUsers] = useState(5);
     const [showSuccessOnBlocking, setShowSuccessOnBlocking] = useState(false)
     const [showSuccessOnSettingAdmin, setShowSuccessOnSettingAdmin] = useState(false)
+    const [showSuccessOnPaying, setShowSuccessOnPaying] = useState(false)
     const {user} = useAuth();
 
     useEffect(() => {
@@ -49,6 +54,11 @@ export default function UserPage() {
         setShowAdminModal(true);
     }
 
+    const showPayModal = (userId, userName) => {
+        setUserToPay({userId, userName});
+        setShowPayUserModal(true);
+    }
+
     const showUserProfile = (userObject) => {
         setUserInfo({});
         setShowUserModal(true);
@@ -59,7 +69,7 @@ export default function UserPage() {
     const reloadData = (users) => {
         const parsedRows = [];
         users.forEach((row) => {
-            const parseRow = newUser(row, showUserProfile, showBlockUser, showSetAdminUser);
+            const parseRow = newUser(row, showUserProfile, showBlockUser, showSetAdminUser, showPayModal);
             parsedRows.push(parseRow);
         });
         
@@ -109,6 +119,10 @@ const columns = React.useMemo(
         Header: "Set Admin",
         accessor: "table_admin",
     },
+    {
+        Header: "Pay",
+        accessor: "table_pay",
+    },
     ], []
   );
 
@@ -154,6 +168,13 @@ const columns = React.useMemo(
         setShowSuccessOnSettingAdmin(true);
     }
 
+    const confirmPay = async (amount) => {
+        await payUser(user.accessToken, userToPay.userId, amount);
+        setShowPayUserModal(false);
+        setPayingAmount(amount);
+        setShowSuccessOnPaying(true);
+    }
+
     const getSetAdminText = () => {
         if(allUsers.find(curr_user => curr_user.uid === userToSetAdmin).admin)
             return ('remove admin privileges from this user');
@@ -190,6 +211,11 @@ const columns = React.useMemo(
             <div className='text-white bg-spoticeleste rounded p-4'>
                 The admin privileges of the user wete changed  </div>  
         </EmptyModal>}
+        {showSuccessOnPaying && 
+        <EmptyModal closeModal={() => setShowSuccessOnPaying(false)}>
+            <div className='text-white bg-spoticeleste rounded p-4'>
+                The amount of {payingAmount} was given successfully  </div>  
+        </EmptyModal>}
         {showLoadingModal && (
             <EmptyModal closeModal={() => setShowLoadingModal(false)}>
                 <Loader/>
@@ -200,6 +226,9 @@ const columns = React.useMemo(
         )}
         {showAdminModal && (
             <ConfirmationModal confirm={confirmSetAdmin} cancel={() => setShowAdminModal(false)} text={getSetAdminText()}/>
+        )}
+        {showPayUserModal && (
+            <PayModal confirm={confirmPay} cancel={() => setShowPayUserModal(false)} user={userToPay}/>
         )}
         {showUserModal && (
             <EmptyModal closeModal={() => setShowUserModal(false)}>

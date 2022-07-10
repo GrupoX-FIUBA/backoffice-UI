@@ -1,7 +1,7 @@
 {
   "name": "backofficeui",
   "version": "0.1.0",
-  "homepage": "https://grupox-fiuba.github.io/backoffice-page",
+  "homepage": "http://admin.spotifiuby.com.ar",
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.9.0",

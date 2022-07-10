@@ -1,5 +1,5 @@
 import React, { useState }  from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "../../application/layout/MainLayout";
 import { useAuth } from "../../context/authContext";
 import Routes from "./routes";
@@ -24,7 +24,7 @@ const Router = () => {
   }
 
   return (
-      <BrowserRouter>
+      <HashRouter>
         <Switch>
             <MainLayout>
               {
@@ -53,7 +53,7 @@ const Router = () => {
               })}
             </MainLayout>
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
   );
 };
 

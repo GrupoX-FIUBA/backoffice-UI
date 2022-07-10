@@ -55,3 +55,19 @@ export const verifyIfUserIsAdmin = async (accessToken) => {
         return false;
     }
 }
+
+export const payUser = async (accessToken, userId, amount) => {
+    const headers = {
+        Authorization: `Bearer ${accessToken}`
+    }
+    try{
+        await axios.post(`${bffUrl}/payment`, {
+            receiverId: `${userId}`,
+            amountInEthers: `${amount}`,
+        },
+        {headers});
+        return true;
+    }catch(err){
+        return false;
+    }
+}
