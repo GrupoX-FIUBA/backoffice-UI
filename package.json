@@ -1,8 +1,8 @@
 {
   "name": "backofficeui",
   "version": "0.1.0",
+  "homepage": "https://grupox-fiuba.github.io/backoffice-page",
   "private": true,
-  "homepage": "/",
   "dependencies": {
     "@craco/craco": "^5.9.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
